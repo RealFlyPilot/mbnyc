@@ -24,22 +24,4 @@ jobs:
           WPE_ENV: mbnyc
           REMOTE_PATH: "wp-content/"
           FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.deployignore
-          PHP_LINT: false
-          SCRIPT: |
-            if [ ! -f ".deployignore" ]; then
-              cat > .deployignore <<EOL
-            # Version control
-            .git
-            .gitignore
-            .github
-            
-            # WP Engine specific
-            .wpe-*
-            .wpengine-conf/
-            
-            # Cache files
-            *.log
-            wp-content/cache/
-            wp-content/upgrade/
-            EOL
-            fi 
+          PHP_LINT: false 
