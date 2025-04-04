@@ -1,4 +1,4 @@
-name: WP Engine Git Push Deployment
+name: WP Engine Git Push Deployment - Dev
 
 on:
   push:
