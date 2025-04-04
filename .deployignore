@@ -43,8 +43,9 @@ dist/
 node_modules
 package.json
 package-lock.json
-composer.json
-composer.lock
+# Exclude root-level composer files but not theme/plugin vendor files
+/composer.json
+/composer.lock
 .eslintrc
 .nvmrc
 .prettierrc
@@ -63,5 +64,8 @@ local-xdebuginfo.php
 .DS_Store
 Thumbs.db
 
-# New patterns to exclude from deployment
-vendor/ 
+# IMPORTANT: Only exclude vendor directories outside of themes/plugins
+# Be careful with vendor/ exclusions as themes/plugins may need them
+/vendor/
+# Don't exclude theme vendor directories
+!wp-content/themes/*/vendor/ 
