@@ -6,18 +6,113 @@ on:
       - dev
 
 jobs:
-  build-and-deploy:
+  pre-deploy-check:
+    name: Run Pre-Deployment Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v3
       
-      - name: Deploy to WP Engine Development
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring, zip, curl
+      
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
+          chmod +x ./scripts/pre-deploy-check.sh
+      
+      - name: Run pre-deployment checks
+        run: ./scripts/pre-deploy-check.sh dev
+      
+      - name: Send notification on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_COLOR: danger
+          SLACK_TITLE: Pre-Deployment Checks Failed
+          SLACK_MESSAGE: 'Pre-deployment checks for dev environment failed. Check GitHub Actions logs for details.'
+
+  build-and-deploy:
+    name: Build & Deploy to WP Engine
+    needs: pre-deploy-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Deploy to WP Engine
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
-          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPENGINE_SSH_PRIVATE_KEY }}
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
           WPE_ENV: mbnycd
           REMOTE_PATH: "wp-content/"
           PHP_LINT: TRUE
-          FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.wpe-push-ignore 
+          FLAGS: --delete --exclude-vcs --include=".*" --include="*" -rzcl
+      
+      - name: Send notification on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_COLOR: danger
+          SLACK_TITLE: Deployment to Development Failed
+          SLACK_MESSAGE: 'Deployment to WP Engine Development environment failed. Check GitHub Actions logs for details.'
+          
+  verify-deployment:
+    name: Verify Deployment
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Wait for deployment
+        run: sleep 30
+        
+      - name: Setup GitHub CLI
+        run: |
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          && sudo apt update \
+          && sudo apt install gh -y
+        
+      - name: Install jq
+        run: sudo apt-get install -y jq
+        
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
+          chmod +x ./scripts/verify-deployment.sh
+          
+      - name: Verify deployment
+        run: ./scripts/verify-deployment.sh dev
+        env:
+          GH_TOKEN: ${{ github.token }}
+        
+      - name: Send notification on success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_COLOR: good
+          SLACK_TITLE: Deployment to Development Successful
+          SLACK_MESSAGE: 'Changes have been successfully deployed to Development. Visit https://mbnycd.wpengine.com to test.'
+          
+      - name: Send notification on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_COLOR: danger
+          SLACK_TITLE: Deployment Verification Failed
+          SLACK_MESSAGE: 'Deployment to Development succeeded but verification failed. The site may have issues.' 

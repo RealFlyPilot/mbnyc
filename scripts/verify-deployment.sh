@@ -75,13 +75,26 @@ check_github_actions() {
     return
   fi
   
+  # Check if jq is available
+  if ! command -v jq &> /dev/null; then
+    echo -e "${YELLOW}⚠ WARNING:${NC} jq not installed, skipping GitHub Actions status parsing"
+    return
+  fi
+  
   # Check workflow status - filter to the most recent run of the deploy workflow for the current environment
   local workflow_file="wpe-deploy-${ENVIRONMENT}.yml"
-  local run_status=$(gh run list --workflow="$workflow_file" --limit=1 --json status,conclusion,headBranch | jq -r '.[0].conclusion')
+  local run_json=$(gh run list --workflow="$workflow_file" --limit=1 --json status,conclusion,headBranch 2>/dev/null || echo '[]')
+  
+  if [ "$run_json" = "[]" ]; then
+    echo -e "${YELLOW}⚠ WARNING:${NC} No GitHub Actions runs found for this workflow"
+    return
+  fi
+  
+  local run_status=$(echo "$run_json" | jq -r '.[0].conclusion // "running"')
   
   if [ "$run_status" == "success" ]; then
     report_check "PASS" "GitHub Actions deployment workflow succeeded"
-  elif [ "$run_status" == "null" ]; then
+  elif [ "$run_status" == "null" ] || [ "$run_status" == "running" ]; then
     echo -e "${YELLOW}⚠ WARNING:${NC} GitHub Actions deployment workflow is still running"
   elif [ -z "$run_status" ]; then
     echo -e "${YELLOW}⚠ WARNING:${NC} No recent GitHub Actions deployment workflow found"
