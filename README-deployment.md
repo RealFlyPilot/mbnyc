@@ -74,22 +74,26 @@ The deployment verification script integrates with the WP Engine API for enhance
 
 To use the WP Engine API, you'll need to set up API credentials:
 
-1. Go to https://my.wpengine.com/api_access
-2. Click on "Generate New API Key"
-3. Give your key a descriptive name (e.g., "GitHub Actions Deployment Verification")
-4. Select "User access" (account owners)
-5. Click "Generate Key"
-6. Save both the **API Key** and **API Secret**
+1. Make sure your WP Engine account has API access enabled
+2. Locate your WP Engine API credentials:
+   - API Username: This is provided by WP Engine
+   - API Password: This is provided by WP Engine
+
+3. Add these credentials to your GitHub repository as secrets:
+   - Go to your GitHub repository's Settings > Secrets and variables > Actions
+   - Add two new repository secrets:
+     - `WPE_API_USER`: Your WP Engine API username
+     - `WPE_API_PASS`: Your WP Engine API password
 
 Then set these as environment variables when running the script:
 
 ```bash
-WPE_API_KEY=your_key WPE_API_SECRET=your_secret ./scripts/verify-deployment.sh dev
+WPE_API_USER=your_user WPE_API_PASS=your_pass ./scripts/verify-deployment.sh dev
 ```
 
 For GitHub Actions, add these as repository secrets:
-- `WPE_API_KEY`
-- `WPE_API_SECRET`
+- `WPE_API_USER`
+- `WPE_API_PASS`
 
 ## GitHub Actions Workflow
 
