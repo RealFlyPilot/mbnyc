@@ -1,4 +1,4 @@
-name: WP Engine Git Push Deployment - Production
+name: WP Engine Deployment - Production
 
 on:
   push:
@@ -6,81 +6,39 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
       - name: PHP Lint
         run: |
           find app/public/wp-content -name "*.php" -type f -print0 | xargs -0 -n1 php -l
-
-      - name: Set up Git Push and Deploy
-        env:
-          SSH_KEY: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+      
+      - name: Deploy to WP Engine
+        uses: wpengine/github-action-wpe-site-deploy@v3
+        with:
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
           WPE_ENV: mbnyc
-        run: |
-          # Set up SSH directory and key
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/wpengine_key
-          chmod 600 ~/.ssh/wpengine_key
-          
-          # Add WP Engine to known hosts
-          ssh-keyscan -t rsa git.wpengine.com >> ~/.ssh/known_hosts
-          
-          echo "Setting up Git for WP Engine deployment..."
-          git config --global user.email "github-actions@example.com"
-          git config --global user.name "GitHub Actions"
-          
-          # Configure the Git remote for WP Engine
-          git remote add wpengine git@git.wpengine.com:production/${WPE_ENV}.git
-          
-          # Create a new branch for deployment - only include wp-content directory
-          echo "Creating deployment branch..."
-          git checkout -b deployment
-          
-          # Stage only the wp-content directory from the app/public directory
-          mkdir -p temp-wp-content
-          cp -r app/public/wp-content/* temp-wp-content/
-          git rm -rf --cached .
-          mkdir -p wp-content
-          cp -r temp-wp-content/* wp-content/
-          
-          # Ignore files that shouldn't be deployed
-          cat > .deployignore <<EOL
-          # Version control
-          .git
-          .gitignore
-          .github
-          
-          # WP Engine specific
-          .wpe-*
-          .wpengine-conf/
-          
-          # Cache files
-          *.log
-          wp-content/cache/
-          wp-content/upgrade/
-          EOL
-          
-          # Remove files in .deployignore
-          while IFS= read -r line || [[ -n "$line" ]]; do
-            # Skip comments and empty lines
-            [[ $line =~ ^#.* ]] || [[ -z "$line" ]] && continue
+          REMOTE_PATH: "wp-content/"
+          FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.deployignore 
+          SCRIPT: |
+            if [ ! -f ".deployignore" ]; then
+              cat > .deployignore <<EOL
+            # Version control
+            .git
+            .gitignore
+            .github
             
-            # Remove the files/directories matching the pattern
-            find wp-content -path "$line" -exec rm -rf {} \; 2>/dev/null || true
-          done < .deployignore
-          
-          # Add and commit the wp-content directory
-          git add wp-content/
-          git commit -m "Deploy wp-content to WP Engine Production"
-          
-          # Push to WP Engine
-          echo "Pushing to WP Engine Production..."
-          GIT_SSH_COMMAND="ssh -i ~/.ssh/wpengine_key" git push wpengine deployment:master -f
-          
-          # Clean up
-          rm -rf temp-wp-content
-          rm -rf wp-content 
+            # WP Engine specific
+            .wpe-*
+            .wpengine-conf/
+            
+            # Cache files
+            *.log
+            wp-content/cache/
+            wp-content/upgrade/
+            EOL
+            fi 

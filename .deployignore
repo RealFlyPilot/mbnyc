@@ -1,7 +1,40 @@
 # Version control
 .git
-.github
 .gitignore
+.github
+
+# WP Engine specific
+.wpe-*
+.wpengine-conf/
+
+# Cache files
+*.log
+wp-content/cache/
+wp-content/upgrade/
+
+# Local development files
+app/conf/
+app/logs/
+app/sql/
+conf/
+logs/
+
+# Node modules and build files
+node_modules/
+build/
+dist/
+
+# Sensitive files
+.env
+.env.*
+*.key
+*.pem
+
+# Temp and backup files
+*.bak
+*.tmp
+*~
+.DS_Store
 
 # Development files
 .DS_Store
@@ -10,8 +43,6 @@ package.json
 package-lock.json
 composer.json
 composer.lock
-.env
-.env.*
 .eslintrc
 .nvmrc
 .prettierrc
@@ -21,11 +52,6 @@ postcss.config.js
 README.md
 CHANGELOG.md
 LICENSE.md
-
-# WP Engine specific
-.wpe-pull-ignore
-.wpe-push-ignore
-.wpengine-conf/
 
 # Local development
 /wp-content/db.php
