@@ -11,16 +11,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: PHP Lint
+        run: |
+          echo "Running PHP lint checks..."
+          find app/public/wp-content -name "*.php" -type f -print0 | xargs -0 -n1 php -l
+      
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.WPE_SSHG_KEY_PRIVATE }}" > ~/.ssh/wpe_id_rsa
+          chmod 600 ~/.ssh/wpe_id_rsa
+          ssh-keyscan -t rsa mbnycd.ssh.wpengine.net >> ~/.ssh/known_hosts
+      
       - name: Deploy to WP Engine
-        uses: wpengine/github-action-wpe-site-deploy@v3
-        with:
-          # Deploy vars
-          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
-          WPE_ENV: mbnycd
-          # Deploy Options
-          REMOTE_PATH: "wp-content/"
-          PHP_LINT: TRUE
-          FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.deployignore
-          CACHE_CLEAR: TRUE
-          # Source path that contains the wp-content directory
-          SRC_PATH: "app/public" 
+        run: |
+          echo "Testing SSH connection..."
+          ssh -i ~/.ssh/wpe_id_rsa wpe_gha+mbnycd@mbnycd.ssh.wpengine.net 'echo SSH connection successful' || { echo "SSH connection failed"; exit 1; }
+          
+          echo "Deploying to WP Engine..."
+          rsync -azvr --inplace --delete --exclude=".*" --exclude-from=.deployignore -e "ssh -i ~/.ssh/wpe_id_rsa" app/public/wp-content/ wpe_gha+mbnycd@mbnycd.ssh.wpengine.net:sites/mbnycd/wp-content/ 
