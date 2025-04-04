@@ -17,16 +17,19 @@ NC='\033[0m' # No Color
 ENVIRONMENT=${1:-dev}
 echo -e "${BLUE}Verifying deployment for ${ENVIRONMENT}...${NC}"
 
-# Map environment to domain
+# Map environment to domain and WP Engine installation name
 case "$ENVIRONMENT" in
   "dev")
     DOMAIN="mbnycd.wpengine.com"
+    WPE_INSTALL="mbnycd"
     ;;
   "staging")
     DOMAIN="mbnycs.wpengine.com"
+    WPE_INSTALL="mbnycs"
     ;;
   "production")
     DOMAIN="mbnyc.com"
+    WPE_INSTALL="mbnyc"
     ;;
   *)
     echo -e "${RED}Invalid environment: $ENVIRONMENT${NC}"
@@ -151,15 +154,76 @@ check_css_variables() {
   fi
 }
 
-# Check if WP Engine sees the deployment
+# Check if WP Engine sees the deployment using API
 check_wpengine_status() {
   echo -e "\n${BLUE}Checking WP Engine deployment status...${NC}"
   
-  echo -e "${YELLOW}⚠ NOTE:${NC} Automated verification of WP Engine deployment status requires API access"
-  echo -e "${YELLOW}⚠ NOTE:${NC} Check the WP Engine dashboard for detailed deployment status"
+  # Check if required environment variables are set
+  if [ -z "$WPE_API_KEY" ] || [ -z "$WPE_API_SECRET" ]; then
+    echo -e "${YELLOW}⚠ WARNING:${NC} WP Engine API credentials not found in environment variables"
+    echo -e "${YELLOW}⚠ WARNING:${NC} Specify WPE_API_KEY and WPE_API_SECRET environment variables"
+    echo -e "${YELLOW}⚠ WARNING:${NC} Check the WP Engine dashboard for detailed deployment status"
+    return
+  fi
+
+  # Check if curl is available
+  if ! command -v curl &> /dev/null; then
+    echo -e "${YELLOW}⚠ WARNING:${NC} curl not installed, skipping WP Engine API check"
+    return
+  fi
+
+  # Check if jq is available
+  if ! command -v jq &> /dev/null; then
+    echo -e "${YELLOW}⚠ WARNING:${NC} jq not installed, skipping WP Engine API response parsing"
+    return
+  fi
   
-  # You would need to use the WP Engine API to automate this check
-  # This is a placeholder for future implementation
+  # Get current timestamp for OAuth signing
+  local current_time=$(date +%s)
+  
+  # Generate API auth signature
+  local signature=$(echo -n "$WPE_API_KEY$current_time" | openssl sha1 -hmac "$WPE_API_SECRET" | awk '{print $2}')
+  
+  # Make API request to get installation details
+  local api_response=$(curl -s "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL" \
+    -H "Authorization: wpe-api $WPE_API_KEY:$signature:$current_time" \
+    -H "Content-Type: application/json")
+  
+  # Check if response contains an error
+  if echo "$api_response" | jq -e '.error' &> /dev/null; then
+    local error_msg=$(echo "$api_response" | jq -r '.error')
+    report_check "FAIL" "WP Engine API error: $error_msg"
+    return
+  fi
+  
+  # Check if installation exists
+  if echo "$api_response" | jq -e '.id' &> /dev/null; then
+    local install_status=$(echo "$api_response" | jq -r '.status')
+    
+    if [ "$install_status" == "active" ]; then
+      report_check "PASS" "WP Engine installation '$WPE_INSTALL' is active"
+      
+      # Get additional details
+      local domain_count=$(echo "$api_response" | jq -r '.domains | length')
+      echo -e "${BLUE}→ Installation has${NC} $domain_count ${BLUE}domains${NC}"
+      
+      # Purge cache if needed
+      echo -e "\n${BLUE}Purging WP Engine cache to ensure fresh content...${NC}"
+      local purge_response=$(curl -s -X POST "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL/purge_cache" \
+        -H "Authorization: wpe-api $WPE_API_KEY:$signature:$current_time" \
+        -H "Content-Type: application/json")
+      
+      if echo "$purge_response" | jq -e '.status == "success"' &> /dev/null; then
+        echo -e "${GREEN}✓ Cache purged successfully${NC}"
+      else
+        echo -e "${YELLOW}⚠ WARNING:${NC} Failed to purge cache"
+      fi
+    else
+      report_check "FAIL" "WP Engine installation status: $install_status"
+    fi
+  else
+    report_check "FAIL" "WP Engine installation '$WPE_INSTALL' not found"
+  fi
 }
 
 # Run all checks
