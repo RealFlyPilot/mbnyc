@@ -56,4 +56,11 @@ LICENSE.md
 
 # Local development
 /wp-content/db.php
-local-xdebuginfo.php 
+local-xdebuginfo.php
+
+# Build files
+.DS_Store
+Thumbs.db
+
+# New patterns to exclude from deployment
+vendor/ 
