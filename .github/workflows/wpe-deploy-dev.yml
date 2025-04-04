@@ -17,6 +17,13 @@ jobs:
         run: |
           find app/public/wp-content -name "*.php" -type f -print0 | xargs -0 -n1 php -l
       
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.WPE_SSHG_KEY_PRIVATE }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa mbnycd.ssh.wpengine.net >> ~/.ssh/known_hosts
+      
       - name: Deploy to WP Engine wp-content
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
@@ -27,22 +34,12 @@ jobs:
           PHP_LINT: false
       
       - name: Deploy root files to WP Engine
-        uses: appleboy/scp-action@master
-        with:
-          host: mbnycd.ssh.wpengine.net
-          username: mbnycd
-          key: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
-          source: "deploy-root/*"
-          target: "/sites/mbnycd/public_html/"
-          strip_components: 1
+        run: |
+          rsync -azvr --exclude=".*" deploy-root/ mbnycd@mbnycd.ssh.wpengine.net:/sites/mbnycd/public_html/
       
       - name: Create timestamp and execute reset scripts
-        uses: appleboy/ssh-action@master
-        with:
-          host: mbnycd.ssh.wpengine.net
-          username: mbnycd
-          key: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
-          script: |
+        run: |
+          ssh mbnycd@mbnycd.ssh.wpengine.net '
             # Create a timestamp file in the document root
             echo "$(date +%s)" > /sites/mbnycd/public_html/.deployment-timestamp
             # Ensure the reset scripts exist and are executable
@@ -50,4 +47,5 @@ jobs:
               if [ -f "/sites/mbnycd/public_html/$script" ]; then
                 chmod +x "/sites/mbnycd/public_html/$script"
               fi
-            done 
+            done
+          ' 
