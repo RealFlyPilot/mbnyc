@@ -1,0 +1,19 @@
+{
+  "name": "mbnyc",
+  "version": "1.0.0",
+  "description": "MBNYC WordPress site",
+  "scripts": {
+    "test": "echo \"No tests configured\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlovascio/mbnyc.git"
+  },
+  "keywords": [
+    "wordpress",
+    "wpengine"
+  ],
+  "author": "Mike Lovascio",
+  "license": "UNLICENSED",
+  "private": true
+} 

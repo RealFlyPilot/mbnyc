@@ -19,13 +19,19 @@ jobs:
           php-version: '8.0'
           extensions: mbstring, zip, curl
       
-      - name: Install dependencies
+      - name: Make scripts executable
         run: |
-          npm ci || npm install
-          chmod +x ./scripts/pre-deploy-check.sh
+          if [ -f ./scripts/pre-deploy-check.sh ]; then
+            chmod +x ./scripts/pre-deploy-check.sh
+          fi
       
       - name: Run pre-deployment checks
-        run: ./scripts/pre-deploy-check.sh dev || echo "Pre-deployment checks failed but continuing for now"
+        run: |
+          if [ -f ./scripts/pre-deploy-check.sh ]; then
+            ./scripts/pre-deploy-check.sh dev || echo "Pre-deployment checks failed but continuing for now"
+          else
+            echo "No pre-deployment check script found, skipping"
+          fi
       
       - name: Send notification on failure
         if: failure() && env.SLACK_WEBHOOK != ''
@@ -90,13 +96,19 @@ jobs:
       - name: Install jq
         run: sudo apt-get install -y jq
         
-      - name: Install dependencies
+      - name: Make scripts executable
         run: |
-          npm ci || npm install
-          chmod +x ./scripts/verify-deployment.sh
+          if [ -f ./scripts/verify-deployment.sh ]; then
+            chmod +x ./scripts/verify-deployment.sh
+          fi
           
       - name: Verify deployment
-        run: ./scripts/verify-deployment.sh dev || echo "Verification failed but proceeding"
+        run: |
+          if [ -f ./scripts/verify-deployment.sh ]; then
+            ./scripts/verify-deployment.sh dev || echo "Verification failed but proceeding"
+          else
+            echo "No verification script found, skipping"
+          fi
         env:
           GH_TOKEN: ${{ github.token }}
           WPE_API_USER: ${{ secrets.WPE_API_USER }}
