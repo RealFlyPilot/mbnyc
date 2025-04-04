@@ -1,5 +1,6 @@
 # Version control
 # Updated: Testing deployment with new GitHub Actions workflow and SSH key
+# Testing deployment: New deployment test
 .git
 .gitignore
 .github
