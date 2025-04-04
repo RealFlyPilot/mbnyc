@@ -49,4 +49,55 @@ docs/
 # IDE configuration
 .vscode/
 .idea/
-*.sublime-* 
+*.sublime-*
+
+# WP Engine Push Ignore File
+# Exclude files from being pushed to WP Engine
+
+# Git and version control files
+.git
+.gitignore
+.gitkeep
+.gitlab-ci.yml
+.github/
+
+# Package Managers
+node_modules/
+vendor/
+composer.json
+composer.lock
+package.json
+package-lock.json
+yarn.lock
+
+# Development files
+.eslintrc
+.prettierrc
+.stylelintrc
+.editorconfig
+phpcs.xml
+webpack.config.js
+gulpfile.js
+Gruntfile.js
+
+# Deploy, CI/CD and workflow files
+.wpe-push-ignore
+scripts/
+wpe
+wpengine-api/
+
+# Local environment files
+.env
+.env.*
+.DS_Store
+local-config.php
+wp-cli.local.php
+*.log
+*.sql
+*.tar.gz
+
+# Documentation
+README.md
+README-deployment.md
+CHANGELOG.md
+LICENSE.md 
