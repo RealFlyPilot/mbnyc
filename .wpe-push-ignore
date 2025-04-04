@@ -1,0 +1,52 @@
+# Version control files
+.git
+.github
+.gitignore
+
+# WordPress core files (if in repo)
+wp-admin/
+wp-includes/
+wp-*.php
+xmlrpc.php
+index.php
+license.txt
+readme.html
+
+# Configuration and sensitive files
+.env*
+!.env.example
+wp-config.php
+*.log
+
+# Development and local files
+node_modules/
+vendor/
+.sass-cache/
+*.map
+*.sql
+*.sql.gz
+.DS_Store
+Thumbs.db
+
+# WP Engine specific
+.wpe-*
+.wpengine-conf/
+
+# Package managers
+package-lock.json
+composer.lock
+yarn.lock
+
+# Testing and documentation
+phpunit.xml
+phpcs.xml
+README.md
+LICENSE
+CHANGELOG.md
+tests/
+docs/
+
+# IDE configuration
+.vscode/
+.idea/
+*.sublime-* 

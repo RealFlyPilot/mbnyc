@@ -44,10 +44,17 @@ This repository contains a WordPress site with the following structure:
 13. Merge to main to trigger deployment to production
 
 ### Deployment to WP Engine
-- **GitHub Actions**: Automatic deployment to WP Engine when changes are merged to dev, staging or main branches
+- **GitHub Actions**: Automatic deployment to WP Engine when changes are merged to dev, staging, or main branches
   - Merging to `dev` branch deploys to WP Engine development environment
   - Merging to `staging` branch deploys to WP Engine staging environment
   - Merging to `main` branch deploys to WP Engine production environment
+
+#### How the GitHub Actions Deployment Works
+1. When code is pushed to one of the tracked branches (dev, staging, main), the corresponding GitHub Action workflow is triggered
+2. The workflow uses the official WP Engine GitHub Action (`wpengine/github-action-wpe-site-deploy`)
+3. The action connects to the appropriate WP Engine environment using SSH
+4. Only the `wp-content` directory is deployed, excluding any files listed in `.wpe-push-ignore`
+5. PHP linting is performed before deployment to catch syntax errors
 
 ## Branching Strategy
 
@@ -65,14 +72,22 @@ This repository contains a WordPress site with the following structure:
 3. Configure local environment
 
 ### GitHub Actions Configuration
-1. Add the following secrets to your GitHub repository:
+1. Add the following secret to your GitHub repository:
    - `WPENGINE_SSH_PRIVATE_KEY`: Your SSH private key for WP Engine
-   - `WPENGINE_SSH_KNOWN_HOSTS`: WP Engine's known hosts entry
+   
+   You can add this secret using the GitHub CLI:
+   ```bash
+   # Generate a new SSH key if needed
+   ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f ~/.ssh/wpengine_key
+   
+   # Add the public key to WP Engine (via WP Engine dashboard)
+   cat ~/.ssh/wpengine_key.pub
+   
+   # Add the private key as a GitHub secret
+   gh secret set WPENGINE_SSH_PRIVATE_KEY < ~/.ssh/wpengine_key
+   ```
 
-2. Replace "SITENAME" in the workflow files with your actual WP Engine site name:
-   - `.github/workflows/wpe-deploy-production.yml`
-   - `.github/workflows/wpe-deploy-staging.yml`
-   - `.github/workflows/wpe-deploy-dev.yml`
+2. Make sure you have a `.wpe-push-ignore` file in your repository root to control which files are excluded from deployment.
 
 ## Maintenance Tasks
 
@@ -101,6 +116,7 @@ This repository contains a WordPress site with the following structure:
 - WP Engine automatically sets environment variables
 - WordPress core updates are managed by WP Engine
 - Performance optimization should utilize WP Engine's caching systems
+- The deployment only pushes the `wp-content` directory to WP Engine, not the entire WordPress installation
 
 ---
 
