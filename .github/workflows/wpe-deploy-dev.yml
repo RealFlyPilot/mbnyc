@@ -17,6 +17,13 @@ jobs:
         run: |
           find app/public/wp-content -name "*.php" -type f -print0 | xargs -0 -n1 php -l
       
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.WPE_SSHG_KEY_PRIVATE }}" > ~/.ssh/wpengine_ed25519
+          chmod 600 ~/.ssh/wpengine_ed25519
+          ssh-keyscan -t ed25519 mbnycd.ssh.wpengine.net >> ~/.ssh/known_hosts
+      
       - name: Deploy to WP Engine
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
@@ -24,6 +31,7 @@ jobs:
           WPE_ENV: mbnycd
           REMOTE_PATH: "wp-content/"
           FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.deployignore 
+          PHP_LINT: false
           SCRIPT: |
             if [ ! -f ".deployignore" ]; then
               cat > .deployignore <<EOL
