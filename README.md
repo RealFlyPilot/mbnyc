@@ -120,4 +120,4 @@ This repository contains a WordPress site with the following structure:
 
 ---
 
-This repository setup was created following best practices for WordPress development with WPEngine and LocalWP. 
+This repository setup was created following best practices for WordPress development with WPEngine and LocalWP. # Deployment test
