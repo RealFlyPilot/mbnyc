@@ -123,3 +123,4 @@ This repository contains a WordPress site with the following structure:
 This repository setup was created following best practices for WordPress development with WPEngine and LocalWP. # Deployment test
 Testing new deployment key Fri Apr  4 00:57:13 PDT 2025
 # Updated repository to RealFlyPilot organization
+# Testing WP Engine deployment with new SSH key
