@@ -1,0 +1,47 @@
+{
+  "mcpServers": {
+    "supabase_composio": {
+      "url": "https://mcp.composio.dev/supabase/abandoned-wailing-tailor-iOwzCD"
+    },
+    "googletasks_composio": {
+      "url": "https://mcp.composio.dev/googletasks/abandoned-wailing-tailor-iOwzCD"
+    },
+    "gmail_composio": {
+      "url": "https://mcp.composio.dev/gmail/abandoned-wailing-tailor-iOwzCD"
+    },
+    "slack_composio": {
+      "url": "https://mcp.composio.dev/slack/abandoned-wailing-tailor-iOwzCD"
+    },
+    "zendesk_composio": {
+      "url": "https://mcp.composio.dev/zendesk/abandoned-wailing-tailor-iOwzCD"
+    },
+    "hubspot_composio": {
+      "url": "https://mcp.composio.dev/hubspot/abandoned-wailing-tailor-iOwzCD"
+    },
+    "github_composio": {
+      "url": "https://mcp.composio.dev/github/abandoned-wailing-tailor-iOwzCD"
+    },
+    "googlesheets_composio": {
+      "url": "https://mcp.composio.dev/googlesheets/abandoned-wailing-tailor-iOwzCD"
+    },
+    "googledrive_composio": {
+      "url": "https://mcp.composio.dev/googledrive/abandoned-wailing-tailor-iOwzCD"
+    },
+    "@21st-dev/magic": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@21st-dev/magic@latest",
+        "API_KEY=\"6d90816cccc0974441707ac4a773c45da21d71d0c7c6043eb2fb8a1fd34ec74b\""
+      ]
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "firecrawl-mcp@latest",
+        "FIRECRAWL_API_KEY=\"fc-88458342d2474827a53fcd5ede0c17f1\""
+      ]
+    }
+  }
+} 

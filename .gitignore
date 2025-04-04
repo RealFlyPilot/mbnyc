@@ -1,0 +1,64 @@
+# WordPress Core Files
+app/public/wp-admin/
+app/public/wp-includes/
+app/public/wp-content/index.php
+app/public/wp-content/plugins/index.php
+app/public/wp-content/themes/index.php
+app/public/index.php
+app/public/license.txt
+app/public/readme.html
+app/public/wp-*.php
+app/public/xmlrpc.php
+
+# Configuration files with sensitive information
+app/public/wp-config.php
+.env
+.env.*
+!.env.example
+
+# Local development files
+app/sql/
+logs/
+app/public/wp-content/debug.log
+app/local-adminer-*
+.wp-cli/
+
+# Local by Flywheel / WP Engine specifics
+app/public/.wpe-pull-ignore
+app/public/.wpe-push-ignore
+
+# Uploads, upgrades, and cache files
+app/public/wp-content/uploads/
+app/public/wp-content/upgrade/
+app/public/wp-content/cache/
+app/public/wp-content/advanced-cache.php
+app/public/wp-content/object-cache.php
+app/public/wp-content/ai1wm-backups/
+app/public/wp-content/updraft/
+app/public/wp-content/wflogs/
+app/public/wp-content/litespeed/
+
+# Backup Files
+*.bak
+*.swp
+*~.nib
+*.zip
+*.sql
+*.gz
+
+# Plugin dependencies
+app/public/wp-content/plugins/*/node_modules/
+app/public/wp-content/plugins/*/vendor/
+app/public/wp-content/themes/*/node_modules/
+app/public/wp-content/themes/*/vendor/
+
+# Misc files
+.DS_Store
+.vscode/
+.idea/
+*.log
+error_log
+access_log
+
+# Uncomment below lines to track specific plugins if needed
+# !app/public/wp-content/plugins/your-custom-plugin/ 
