@@ -56,7 +56,7 @@ jobs:
       - name: Deploy to WP Engine
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
-          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPENGINE_SSH_PRIVATE_KEY }}
           WPE_ENV: mbnycd
           REMOTE_PATH: "wp-content/"
           PHP_LINT: TRUE
