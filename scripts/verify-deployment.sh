@@ -142,15 +142,32 @@ check_php_errors() {
 check_css_variables() {
   echo -e "\n${BLUE}Checking for CSS variables...${NC}"
   
-  local css_url="https://${DOMAIN}/wp-content/themes/hello-elementor-child/css/variables.css"
-  local css_content=$(curl -s "$css_url")
+  # Try multiple possible paths for CSS variables
+  local css_paths=(
+    "https://${DOMAIN}/wp-content/themes/hello-elementor-child/css/variables.css"
+    "https://${DOMAIN}/wp-content/themes/mbnyc/assets/css/variables.css"
+    "https://${DOMAIN}/wp-content/themes/hello-elementor-child/assets/css/variables.css"
+  )
   
-  if [ -z "$css_content" ]; then
-    report_check "FAIL" "CSS variables file not accessible"
-  elif echo "$css_content" | grep -q ":root"; then
-    report_check "PASS" "CSS variables file contains :root declaration"
-  else
-    report_check "FAIL" "CSS variables file exists but doesn't contain expected content"
+  local found=false
+  
+  for css_url in "${css_paths[@]}"; do
+    echo -e "${BLUE}Checking path: ${css_url}${NC}"
+    local css_content=$(curl -s "$css_url")
+    
+    if echo "$css_content" | grep -q ":root"; then
+      report_check "PASS" "CSS variables file found at $css_url and contains :root declaration"
+      found=true
+      break
+    elif [ -n "$css_content" ] && [ "$css_content" != *"404 Not Found"* ]; then
+      report_check "FAIL" "File found at $css_url but doesn't contain expected content"
+      found=true
+      break
+    fi
+  done
+  
+  if [ "$found" = false ]; then
+    report_check "FAIL" "CSS variables file not found at any expected locations"
   fi
 }
 
