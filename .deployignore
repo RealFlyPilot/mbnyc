@@ -1,0 +1,32 @@
+# Version control
+.git
+.github
+.gitignore
+
+# Development files
+.DS_Store
+node_modules
+package.json
+package-lock.json
+composer.json
+composer.lock
+.env
+.env.*
+.eslintrc
+.nvmrc
+.prettierrc
+webpack.config.js
+tailwind.config.js
+postcss.config.js
+README.md
+CHANGELOG.md
+LICENSE.md
+
+# WP Engine specific
+.wpe-pull-ignore
+.wpe-push-ignore
+.wpengine-conf/
+
+# Local development
+/wp-content/db.php
+local-xdebuginfo.php 
