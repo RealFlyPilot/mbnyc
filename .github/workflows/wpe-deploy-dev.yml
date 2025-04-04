@@ -17,11 +17,37 @@ jobs:
         run: |
           find app/public/wp-content -name "*.php" -type f -print0 | xargs -0 -n1 php -l
       
-      - name: Deploy to WP Engine
+      - name: Deploy to WP Engine wp-content
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
           WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
           WPE_ENV: mbnycd
           REMOTE_PATH: "wp-content/"
           FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.deployignore
-          PHP_LINT: false 
+          PHP_LINT: false
+      
+      - name: Deploy root files to WP Engine
+        uses: appleboy/scp-action@master
+        with:
+          host: mbnycd.ssh.wpengine.net
+          username: mbnycd
+          key: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          source: "deploy-root/*"
+          target: "/sites/mbnycd/public_html/"
+          strip_components: 1
+      
+      - name: Create timestamp and execute reset scripts
+        uses: appleboy/ssh-action@master
+        with:
+          host: mbnycd.ssh.wpengine.net
+          username: mbnycd
+          key: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          script: |
+            # Create a timestamp file in the document root
+            echo "$(date +%s)" > /sites/mbnycd/public_html/.deployment-timestamp
+            # Ensure the reset scripts exist and are executable
+            for script in reset-elementor.php reset-customizer.php reset-styles.php; do
+              if [ -f "/sites/mbnycd/public_html/$script" ]; then
+                chmod +x "/sites/mbnycd/public_html/$script"
+              fi
+            done 
