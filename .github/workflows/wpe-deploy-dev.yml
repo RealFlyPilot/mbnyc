@@ -1,0 +1,26 @@
+name: Deploy to WP Engine Development
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup SSH Keys and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: git.wpengine.com
+          username: git
+          key: ${{ secrets.WPENGINE_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.WPENGINE_SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+            git clone --mirror https://github.com/${{ github.repository }}.git repo
+            cd repo
+            git push --force git@git.wpengine.com:development/SITENAME.git HEAD:master 

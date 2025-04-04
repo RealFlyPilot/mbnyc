@@ -34,14 +34,18 @@ This repository contains a WordPress site with the following structure:
 3. Make changes locally
 4. Commit changes to feature branch
 5. Push to GitHub
-6. Create a pull request to the staging branch
-7. Merge to staging to trigger deployment to staging environment
-8. Test on staging
-9. Create a pull request to main
-10. Merge to main to trigger deployment to production
+6. Create a pull request to the dev branch
+7. Merge to dev to trigger deployment to development environment
+8. Test on dev environment
+9. Create a pull request to staging
+10. Merge to staging to trigger deployment to staging environment
+11. Test on staging
+12. Create a pull request to main
+13. Merge to main to trigger deployment to production
 
 ### Deployment to WP Engine
-- **GitHub Actions**: Automatic deployment to WP Engine when changes are merged to staging or main branches
+- **GitHub Actions**: Automatic deployment to WP Engine when changes are merged to dev, staging or main branches
+  - Merging to `dev` branch deploys to WP Engine development environment
   - Merging to `staging` branch deploys to WP Engine staging environment
   - Merging to `main` branch deploys to WP Engine production environment
 
@@ -49,6 +53,7 @@ This repository contains a WordPress site with the following structure:
 
 - `main` - Production code
 - `staging` - Staging environment for testing
+- `dev` - Development environment for initial testing
 - `feature/*` - Feature branches
 - `bugfix/*` - Bug fix branches
 
@@ -67,6 +72,7 @@ This repository contains a WordPress site with the following structure:
 2. Replace "SITENAME" in the workflow files with your actual WP Engine site name:
    - `.github/workflows/wpe-deploy-production.yml`
    - `.github/workflows/wpe-deploy-staging.yml`
+   - `.github/workflows/wpe-deploy-dev.yml`
 
 ## Maintenance Tasks
 
@@ -75,18 +81,20 @@ This repository contains a WordPress site with the following structure:
 - Use WP Migrate DB Pro or similar tools for syncing databases
 
 ### Plugin Updates
-- Always test plugin updates on staging first
+- Always test plugin updates on dev first, then staging
 - Document any issues and required changes
 - Consider using Composer for plugin management
 
 ## Contributing
 
-1. Create a feature branch from `staging`
+1. Create a feature branch from `dev`
 2. Make changes locally
 3. Commit and push to GitHub
-4. Open a pull request to `staging`
-5. After review and testing, merge to `staging`
-6. Create a pull request from `staging` to `main` for production deployment
+4. Open a pull request to `dev`
+5. After review and testing, merge to `dev`
+6. Create a pull request from `dev` to `staging`
+7. After review and testing, merge to `staging`
+8. Create a pull request from `staging` to `main` for production deployment
 
 ## WordPress and WP Engine Specific Notes
 
