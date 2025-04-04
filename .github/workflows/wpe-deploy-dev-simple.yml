@@ -1,0 +1,29 @@
+name: Deploy to WP Engine Development (Simple)
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Deploy to WP Engine
+        uses: wpengine/github-action-wpe-site-deploy@v3
+        with:
+          # Your WP Engine environment name
+          WPE_ENV: mbnycd
+          # Deploy only the wp-content directory
+          REMOTE_PATH: "wp-content/"
+          # The WP Engine SSH Gateway private key
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          # Enable PHP linting
+          PHP_LINT: TRUE
+          # Deploy flags for rsync 
+          FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.wpe-push-ignore
+          # Source path
+          SRC_PATH: "app/public" 
