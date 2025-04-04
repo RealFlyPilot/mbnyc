@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -49,18 +49,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
         
       - name: Deploy to WP Engine
-        uses: wpengine/github-action-wpe-site-deploy@v3
+        uses: wpengine/github-action-wpe-site-deploy@v3.2.4
         with:
+          # WPE_SSHG_KEY_PRIVATE is used for GitHub Actions deployment
           WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          # The WP Engine environment name
           WPE_ENV: mbnycd
+          # Deploy only the wp-content directory
           REMOTE_PATH: "wp-content/"
+          # Enable PHP linting
           PHP_LINT: TRUE
+          # Deploy flags for rsync
           FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.wpe-push-ignore
+          # Deployment branch - matches the GitHub branch name
+          SRC_PATH: "app/public"
       
       - name: Send notification on failure
         if: failure() && env.SLACK_WEBHOOK != ''
@@ -79,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Wait for deployment
         run: sleep 45
