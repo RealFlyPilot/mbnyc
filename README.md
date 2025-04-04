@@ -1,145 +1,98 @@
-# MBNYC WordPress Site
-
-This repository contains the WordPress site for MBNYC. The site is hosted on WPEngine and developed locally using LocalWP.
+# WordPress Project for WPEngine
 
 ## Project Structure
 
-The repository is organized following LocalWP and WPEngine best practices. The main project structure is:
+This repository contains a WordPress site with the following structure:
 
-```
-mbnyc/
-├── app/
-│   ├── public/          # WordPress core installation
-│   │   ├── wp-admin/    # WordPress admin files
-│   │   ├── wp-content/  # Themes, plugins, and uploads
-│   │   ├── wp-includes/ # WordPress core files
-│   │   └── ...          # Other WordPress files
-│   └── sql/             # Database exports (not tracked in Git)
-├── conf/                # LocalWP configuration (not tracked in Git)
-└── logs/                # Local logs (not tracked in Git)
-```
+- `/app/public/` - WordPress core installation
+- `/app/sql/` - Database exports
+- `/app/logs/` - Local development logs
+- `/app/conf/` - Local configuration files
 
-### Key Decisions & Best Practices
+## Key Decisions & Best Practices
 
-1. **Repository Root Location**: We've placed the Git repository at the root of the LocalWP site directory rather than inside the `wp-content` folder. This allows us to:
-   - Track WordPress configuration files if needed
-   - Track custom reset scripts and other site-specific files
-   - Maintain a complete picture of the site architecture
-
-2. **Excluded Content**: We've excluded the following from version control:
-   - Uploads directory (typically large media files)
-   - Local database files
-   - Local configuration files with sensitive information
-   - Cache and temporary files
-   - LocalWP specific configuration files
-
-3. **Included Content**: We're tracking:
-   - WordPress core files (optional, can be excluded if preferred)
-   - Custom themes
-   - Plugins (both third-party and custom)
-   - Custom scripts and configuration files
+- Repository root is `/` (not in `/app/public/`)
+- **Excluded from version control**:
+  - WordPress core files
+  - Uploads directory
+  - Sensitive configuration files (wp-config.php, .env files except .env.example)
+  - Local development files
+  - Node modules and vendor directories
+  
+- **Included in version control**:
+  - Custom themes
+  - Custom plugins
+  - Custom mu-plugins
+  - Configuration files (.gitignore, README, etc.)
+  - GitHub Actions workflows for deployment
 
 ## Development Workflow
 
 ### Local Development
+1. Clone the repository
+2. Set up LocalWP environment
+3. Make changes locally
+4. Commit changes to feature branch
+5. Push to GitHub
+6. Create a pull request to the staging branch
+7. Merge to staging to trigger deployment to staging environment
+8. Test on staging
+9. Create a pull request to main
+10. Merge to main to trigger deployment to production
 
-1. Clone this repository
-2. Import the site into LocalWP
-3. Make your changes locally
-4. Test thoroughly
-5. Commit and push your changes
+### Deployment to WP Engine
+- **GitHub Actions**: Automatic deployment to WP Engine when changes are merged to staging or main branches
+  - Merging to `staging` branch deploys to WP Engine staging environment
+  - Merging to `main` branch deploys to WP Engine production environment
 
-### Deployment to WPEngine
+## Branching Strategy
 
-WPEngine offers multiple deployment methods:
-
-1. **Git Push Deployment**:
-   - Add WPEngine as a remote: `git remote add production git@git.wpengine.com:production/sitename.git`
-   - Push to deploy: `git push production main`
-
-2. **SFTP Deployment**:
-   - Use WPEngine's SFTP credentials to upload changed files
-
-3. **WP Engine Portal Deployment**:
-   - Use the WPEngine user portal to deploy from GitHub
-
-### Branching Strategy
-
-We recommend using the following branching strategy:
-
-- `main`: Production-ready code
-- `staging`: For testing before production
-- `feature/*`: For developing new features
-- `bugfix/*`: For fixing bugs
+- `main` - Production code
+- `staging` - Staging environment for testing
+- `feature/*` - Feature branches
+- `bugfix/*` - Bug fix branches
 
 ## Setup Instructions
 
 ### Initial Setup
+1. Clone the repository: `git clone [repository-url]`
+2. Set up LocalWP site with the cloned repository
+3. Configure local environment
 
-1. Clone this repository:
-   ```
-   git clone git@github.com:RealFlyPilot/mbnyc.git
-   ```
+### GitHub Actions Configuration
+1. Add the following secrets to your GitHub repository:
+   - `WPENGINE_SSH_PRIVATE_KEY`: Your SSH private key for WP Engine
+   - `WPENGINE_SSH_KNOWN_HOSTS`: WP Engine's known hosts entry
 
-2. Set up LocalWP:
-   - Create a new site in LocalWP
-   - Point it to the cloned repository location
-   - Import the database if available
-
-### Adding WPEngine as a Remote
-
-```bash
-git remote add production git@git.wpengine.com:production/sitename.git
-git remote add staging git@git.wpengine.com:staging/sitename.git
-```
-
-Replace `sitename` with your WPEngine site name.
+2. Replace "SITENAME" in the workflow files with your actual WP Engine site name:
+   - `.github/workflows/wpe-deploy-production.yml`
+   - `.github/workflows/wpe-deploy-staging.yml`
 
 ## Maintenance Tasks
 
 ### Database Management
-
-- Export: Use LocalWP's database export feature
-- Import: Use LocalWP's database import feature
+- Export database from production when needed for significant updates
+- Use WP Migrate DB Pro or similar tools for syncing databases
 
 ### Plugin Updates
-
-Always test plugin updates locally before deploying to production.
+- Always test plugin updates on staging first
+- Document any issues and required changes
+- Consider using Composer for plugin management
 
 ## Contributing
 
-1. Create a new branch for your changes
-2. Make your changes and test thoroughly
-3. Push your branch and create a pull request
-4. After review, merge into the main branch
-5. Deploy to staging for testing
-6. Deploy to production
+1. Create a feature branch from `staging`
+2. Make changes locally
+3. Commit and push to GitHub
+4. Open a pull request to `staging`
+5. After review and testing, merge to `staging`
+6. Create a pull request from `staging` to `main` for production deployment
 
-## WordPress and WPEngine Specific Notes
+## WordPress and WP Engine Specific Notes
 
-### WPEngine Environment Variables
-
-WPEngine provides environment-specific constants you can use in your `wp-config.php`:
-
-```php
-if ( defined( 'WPE_ENVIRONMENT' ) ) {
-    switch ( WPE_ENVIRONMENT ) {
-        case 'production':
-            // Production-specific settings
-            break;
-        case 'staging':
-            // Staging-specific settings
-            break;
-        default:
-            // Development settings
-            break;
-    }
-}
-```
-
-### WordPress Core Updates
-
-WPEngine handles WordPress core updates automatically. For local development, keep WordPress updated through LocalWP's interface.
+- WP Engine automatically sets environment variables
+- WordPress core updates are managed by WP Engine
+- Performance optimization should utilize WP Engine's caching systems
 
 ---
 
