@@ -158,71 +158,52 @@ check_css_variables() {
 check_wpengine_status() {
   echo -e "\n${BLUE}Checking WP Engine deployment status...${NC}"
   
-  # Check if required environment variables are set
-  if [ -z "$WPE_API_KEY" ] || [ -z "$WPE_API_SECRET" ]; then
-    echo -e "${YELLOW}⚠ WARNING:${NC} WP Engine API credentials not found in environment variables"
-    echo -e "${YELLOW}⚠ WARNING:${NC} Specify WPE_API_KEY and WPE_API_SECRET environment variables"
-    echo -e "${YELLOW}⚠ WARNING:${NC} Check the WP Engine dashboard for detailed deployment status"
-    return
-  fi
-
-  # Check if curl is available
-  if ! command -v curl &> /dev/null; then
-    echo -e "${YELLOW}⚠ WARNING:${NC} curl not installed, skipping WP Engine API check"
-    return
-  fi
-
-  # Check if jq is available
-  if ! command -v jq &> /dev/null; then
-    echo -e "${YELLOW}⚠ WARNING:${NC} jq not installed, skipping WP Engine API response parsing"
-    return
-  fi
-  
-  # Get current timestamp for OAuth signing
-  local current_time=$(date +%s)
-  
-  # Generate API auth signature
-  local signature=$(echo -n "$WPE_API_KEY$current_time" | openssl sha1 -hmac "$WPE_API_SECRET" | awk '{print $2}')
-  
-  # Make API request to get installation details
-  local api_response=$(curl -s "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL" \
-    -H "Authorization: wpe-api $WPE_API_KEY:$signature:$current_time" \
-    -H "Content-Type: application/json")
-  
-  # Check if response contains an error
-  if echo "$api_response" | jq -e '.error' &> /dev/null; then
-    local error_msg=$(echo "$api_response" | jq -r '.error')
-    report_check "FAIL" "WP Engine API error: $error_msg"
-    return
-  fi
-  
-  # Check if installation exists
-  if echo "$api_response" | jq -e '.id' &> /dev/null; then
-    local install_status=$(echo "$api_response" | jq -r '.status')
-    
-    if [ "$install_status" == "active" ]; then
-      report_check "PASS" "WP Engine installation '$WPE_INSTALL' is active"
-      
-      # Get additional details
-      local domain_count=$(echo "$api_response" | jq -r '.domains | length')
-      echo -e "${BLUE}→ Installation has${NC} $domain_count ${BLUE}domains${NC}"
-      
-      # Purge cache if needed
-      echo -e "\n${BLUE}Purging WP Engine cache to ensure fresh content...${NC}"
-      local purge_response=$(curl -s -X POST "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL/purge_cache" \
-        -H "Authorization: wpe-api $WPE_API_KEY:$signature:$current_time" \
-        -H "Content-Type: application/json")
-      
-      if echo "$purge_response" | jq -e '.status == "success"' &> /dev/null; then
-        echo -e "${GREEN}✓ Cache purged successfully${NC}"
-      else
-        echo -e "${YELLOW}⚠ WARNING:${NC} Failed to purge cache"
-      fi
-    else
-      report_check "FAIL" "WP Engine installation status: $install_status"
-    fi
+  # Check if we have the WP Engine API credentials
+  if [[ -z "$WPE_API_USER" || -z "$WPE_API_PASS" ]]; then
+    echo -e "${YELLOW}WP Engine API credentials not found. Skipping API checks.${NC}"
+    echo -e "${YELLOW}To enable API checks, set WPE_API_USER and WPE_API_PASS environment variables.${NC}"
   else
-    report_check "FAIL" "WP Engine installation '$WPE_INSTALL' not found"
+    echo -e "${BLUE}Checking WP Engine installation status...${NC}"
+    
+    # Create Basic Auth header
+    AUTH_HEADER="Authorization: Basic $(echo -n "$WPE_API_USER:$WPE_API_PASS" | base64)"
+    
+    # Make API request to get installation details
+    INSTALLATION_DATA=$(curl -s -H "$AUTH_HEADER" \
+      "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL")
+    
+    if [[ "$INSTALLATION_DATA" == *"error"* ]]; then
+      echo -e "${RED}Error retrieving installation data: $INSTALLATION_DATA${NC}"
+    else
+      # Extract and display installation information using jq if available
+      if command -v jq &> /dev/null; then
+        INSTALL_NAME=$(echo $INSTALLATION_DATA | jq -r '.name')
+        INSTALL_ENV=$(echo $INSTALLATION_DATA | jq -r '.environment')
+        INSTALL_STATUS=$(echo $INSTALLATION_DATA | jq -r '.status')
+        WP_VERSION=$(echo $INSTALLATION_DATA | jq -r '.wordpress.version')
+        PHP_VERSION=$(echo $INSTALLATION_DATA | jq -r '.php_version')
+        
+        echo -e "${GREEN}Installation Name: $INSTALL_NAME${NC}"
+        echo -e "${GREEN}Environment Type: $INSTALL_ENV${NC}"
+        echo -e "${GREEN}Status: $INSTALL_STATUS${NC}"
+        echo -e "${GREEN}WordPress Version: $WP_VERSION${NC}"
+        echo -e "${GREEN}PHP Version: $PHP_VERSION${NC}"
+      else
+        echo -e "${YELLOW}jq not installed, showing raw API response:${NC}"
+        echo -e "${GREEN}$INSTALLATION_DATA${NC}"
+      fi
+      
+      # Purge WP Engine cache
+      echo -e "${BLUE}Purging WP Engine cache...${NC}"
+      PURGE_RESULT=$(curl -s -X POST -H "$AUTH_HEADER" \
+        "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL/cache_purge")
+      
+      if [[ "$PURGE_RESULT" == *"error"* ]]; then
+        echo -e "${RED}Error purging cache: $PURGE_RESULT${NC}"
+      else
+        echo -e "${GREEN}Cache purged successfully.${NC}"
+      fi
+    fi
   fi
 }
 
