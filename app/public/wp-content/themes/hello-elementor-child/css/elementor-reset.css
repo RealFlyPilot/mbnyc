@@ -1,0 +1,348 @@
+/**
+ * Elementor Reset CSS
+ * 
+ * This file standardizes Elementor styling and enforces design system tokens
+ * by applying CSS variables consistently across all Elementor elements.
+ */
+
+/* Typography reset for all Elementor text widgets */
+.elementor-widget-heading h1.elementor-heading-title,
+.elementor-widget-heading h2.elementor-heading-title,
+.elementor-widget-heading h3.elementor-heading-title,
+.elementor-widget-heading h4.elementor-heading-title,
+.elementor-widget-heading h5.elementor-heading-title,
+.elementor-widget-heading h6.elementor-heading-title,
+.elementor-widget-text-editor,
+.elementor-widget-icon-box .elementor-icon-box-title,
+.elementor-widget-icon-box .elementor-icon-box-description,
+.elementor-widget-tabs .elementor-tab-title,
+.elementor-widget-tabs .elementor-tab-content,
+.elementor-widget-accordion .elementor-accordion-title,
+.elementor-widget-accordion .elementor-accordion-content,
+.elementor-widget-toggle .elementor-toggle-title,
+.elementor-widget-toggle .elementor-toggle-content,
+.elementor-widget-counter .elementor-counter-number-wrapper,
+.elementor-widget-counter .elementor-counter-title,
+.elementor-widget-testimonial .elementor-testimonial-content,
+.elementor-widget-testimonial .elementor-testimonial-name,
+.elementor-widget-testimonial .elementor-testimonial-job,
+.elementor-widget-progress .elementor-title,
+.elementor-widget-progress .elementor-progress-percentage,
+.elementor-price-table .elementor-price-table__heading,
+.elementor-price-table .elementor-price-table__subheading,
+.elementor-price-table .elementor-price-table__price,
+.elementor-price-table .elementor-price-table__period,
+.elementor-price-table .elementor-price-table__feature-inner {
+    font-family: var(--font-primary);
+    color: var(--color-text);
+}
+
+/* Headings */
+.elementor-widget-heading h1.elementor-heading-title {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+.elementor-widget-heading h2.elementor-heading-title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+.elementor-widget-heading h3.elementor-heading-title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+.elementor-widget-heading h4.elementor-heading-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-normal);
+}
+
+.elementor-widget-heading h5.elementor-heading-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-normal);
+}
+
+.elementor-widget-heading h6.elementor-heading-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-normal);
+}
+
+/* Text editor */
+.elementor-widget-text-editor {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+}
+
+/* Buttons */
+.elementor-widget-button .elementor-button {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    transition: all var(--transition-normal) var(--transition-ease);
+}
+
+.elementor-widget-button .elementor-button:hover {
+    color: var(--color-white);
+    background-color: var(--color-primary-dark);
+}
+
+/* Button sizes */
+.elementor-widget-button.elementor-size-xs .elementor-button {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+}
+
+.elementor-widget-button.elementor-size-sm .elementor-button {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.elementor-widget-button.elementor-size-md .elementor-button {
+    font-size: var(--font-size-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.elementor-widget-button.elementor-size-lg .elementor-button {
+    font-size: var(--font-size-lg);
+    padding: var(--spacing-md) var(--spacing-xl);
+}
+
+.elementor-widget-button.elementor-size-xl .elementor-button {
+    font-size: var(--font-size-xl);
+    padding: var(--spacing-md) var(--spacing-xl);
+}
+
+/* Custom button type: inverted */
+.elementor-widget-button .elementor-button.elementor-button-inverted {
+    color: var(--color-primary);
+    background-color: transparent;
+    border: var(--border-width-medium) solid var(--color-primary);
+}
+
+.elementor-widget-button .elementor-button.elementor-button-inverted:hover {
+    color: var(--color-white);
+    background-color: var(--color-primary);
+}
+
+/* Forms */
+.elementor-field-group .elementor-field-textual {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    background-color: var(--color-white);
+    border: var(--border-width-thin) solid var(--color-gray);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
+}
+
+.elementor-field-group .elementor-field-textual:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 var(--border-width-thin) rgba(var(--color-primary-rgb), 0.2);
+}
+
+.elementor-field-group .elementor-select-wrapper select {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    background-color: var(--color-white);
+    border: var(--border-width-thin) solid var(--color-gray);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
+}
+
+/* Icons */
+.elementor-icon {
+    color: var(--color-primary);
+}
+
+.elementor-view-stacked .elementor-icon {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.elementor-view-framed .elementor-icon {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Icon boxes */
+.elementor-widget-icon-box .elementor-icon-box-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+}
+
+.elementor-widget-icon-box .elementor-icon-box-description {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    color: var(--color-gray);
+}
+
+/* Accordion and Tabs */
+.elementor-widget-accordion .elementor-accordion-title,
+.elementor-widget-toggle .elementor-toggle-title,
+.elementor-widget-tabs .elementor-tab-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    color: var(--color-text);
+}
+
+.elementor-widget-accordion .elementor-active .elementor-accordion-title,
+.elementor-widget-toggle .elementor-active .elementor-toggle-title,
+.elementor-widget-tabs .elementor-tab-title.elementor-active {
+    color: var(--color-primary);
+}
+
+.elementor-widget-accordion .elementor-accordion-content,
+.elementor-widget-toggle .elementor-toggle-content,
+.elementor-widget-tabs .elementor-tab-content {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+}
+
+/* Counter */
+.elementor-widget-counter .elementor-counter-number-wrapper {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-primary);
+}
+
+.elementor-widget-counter .elementor-counter-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+}
+
+/* Testimonials */
+.elementor-widget-testimonial .elementor-testimonial-content {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-loose);
+    font-style: italic;
+    color: var(--color-text);
+}
+
+.elementor-widget-testimonial .elementor-testimonial-name {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text);
+}
+
+.elementor-widget-testimonial .elementor-testimonial-job {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    color: var(--color-gray);
+}
+
+/* Image captions */
+.elementor-widget-image-box .elementor-image-box-content .elementor-image-box-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text);
+}
+
+.elementor-widget-image-box .elementor-image-box-content .elementor-image-box-description {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    color: var(--color-gray);
+}
+
+/* Progress bars */
+.elementor-widget-progress .elementor-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+}
+
+.elementor-widget-progress .elementor-progress-wrapper {
+    height: 8px;
+    border-radius: var(--border-radius-full);
+}
+
+.elementor-widget-progress .elementor-progress-bar {
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius-full);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .elementor-widget-heading h1.elementor-heading-title {
+        font-size: var(--font-size-4xl);
+    }
+    
+    .elementor-widget-heading h2.elementor-heading-title {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .elementor-widget-heading h3.elementor-heading-title {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .elementor-widget-heading h4.elementor-heading-title {
+        font-size: var(--font-size-xl);
+    }
+    
+    .elementor-widget-heading h5.elementor-heading-title {
+        font-size: var(--font-size-lg);
+    }
+    
+    .elementor-widget-heading h6.elementor-heading-title {
+        font-size: var(--font-size-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .elementor-widget-heading h1.elementor-heading-title {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .elementor-widget-heading h2.elementor-heading-title {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .elementor-widget-heading h3.elementor-heading-title {
+        font-size: var(--font-size-xl);
+    }
+    
+    .elementor-widget-button .elementor-button {
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+} 

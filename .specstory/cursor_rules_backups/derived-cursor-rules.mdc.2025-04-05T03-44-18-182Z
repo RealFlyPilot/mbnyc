@@ -1,0 +1,109 @@
+
+## PROJECT OVERVIEW
+This project is a WordPress website, confirmed by the directory structure (specifically `app/public/wp-admin`, `app/public/wp-content`, `app/public/wp-includes`) and the presence of a database dump (`app/sql/local.sql`). The project uses a Local by Flywheel or Local WP directory structure, a common local WordPress development environment.  Files `.wpe-pull-ignore` and `.wpe-push-ignore` suggest potential deployment to WP Engine hosting.  No `package.json` was found, indicating it is not a Node.js based project. The `conf` directory contains configuration files for MySQL, Nginx, and PHP.  The `wp-content` directory contains: `mu-plugins`, `plugins`, `themes`, `uploads`, `upgrade`, `upgrade-temp-backup`.  Plugins include: Advanced Custom Fields Pro, Autoupdater, Custom Typekit Fonts, Elementor, Elementor Pro, Gravity Forms, Gravity Forms Stripe, Insert Headers and Footers, Safe SVG, Simple History, and WP Mail SMTP. The primary theme is Hello Elementor, with a child theme containing custom CSS and a modified Elementor button type.  The child theme includes a `custom.css` file (7.6KB) and adds an "Inverted" button type to Elementor.  The `mu-plugins` directory is currently empty. The project utilizes a CSS variable system defined in `app/public/wp-content/themes/hello-elementor-child/css/variables.css` and base styles in `app/public/wp-content/themes/hello-elementor-child/css/base-styles.css`. A style guide is located at `app/public/wp-content/themes/hello-elementor-child/style-guide.md`.  The project uses a standard WordPress development approach with Elementor as the primary builder. There are minimal custom template files in the child theme, suggesting most customizations are done through Elementor, custom CSS, and the functionality provided by the plugins.  The project structure also includes a `.specstory` directory and a `logs` directory.  The project does not utilize Next.js, Supabase, or TypeScript.  The project aims to emulate the visual style of Gucci.com, using a primarily black and white color palette with Futura PT font. The project uses a CSS variable system for managing styles.  The project utilizes a CSS variable system for managing styles. A formalized typographic scale, based on a perfect fourth ratio (1.333), has been implemented using CSS variables for consistent sizing across headings and body text. See `css/variables.css` and `css/base-styles.css` for implementation.  The project utilizes Local as a development environment and may be deployed to WP Engine.  Three PHP scripts (`reset-elementor.php`, `reset-customizer.php`, `reset-styles.php`) have been added to the root directory to reset Elementor and Customizer styles to defaults.  The project now utilizes Node.js v23.5.0 and the 21st.dev Magic MCP via the Cursor CLI client and Cline (VSCode client).  An existing `mcp.json` file was found in the `~/.cursor` directory.  The 21st.dev Magic MCP offers AI-powered UI component generation, access to a modern component library, TypeScript support, SVGL integration, and real-time component previews. Installation was performed using `npx @21st-dev/cli@latest install cursor --api-key YOUR_API_KEY`.  Manual configuration is also possible by adding the `@21st-dev/magic` entry to `~/.cursor/mcp.json`.  The 21st.dev Magic MCP was installed using `npx -y @21st-dev/cli@latest install cursor --api-key "6d90816cccc0974441707ac4a773c45da21d71d0c7c6043eb2fb8a1fd34ec74b"`.  To use Magic MCP, type `/ui` in the AI chat followed by a component description.  For example: `/ui create a modern navigation bar with responsive design`.  The Firecrawl MCP was installed, requiring the `FIRECRAWL_API_KEY` environment variable. The Firecrawl MCP was installed using `npx -y firecrawl-mcp@latest FIRECRAWL_API_KEY="fc-88458342d2474827a53fcd5ede0c17f1"`.  The project was initialized at the root level, encompassing the entire WordPress installation.  Best practices for managing a WordPress project in Git, especially with a WP Engine deployment, are documented in the `mbnyc` repository's README.md. Local development environment uses LocalWP and the site is accessible at `http://localhost:10013`.  The local URL for the site was confirmed to be `http://localhost:10013` through examination of the LocalWP nginx configuration file (`/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/conf/nginx/site.conf`). Three PHP scripts (`reset-elementor.php`, `reset-customizer.php`, `reset-styles.php`) are available to reset Elementor, Customizer, and general styles.  The `reset-styles.php` script provides a comprehensive reset, clearing Elementor kits, global settings, CSS cache, Customizer settings, and regenerating CSS. Access via `http://localhost:10013/reset-styles.php`. The `reset-styles.php` script requires administrator privileges to execute.  The `reset-styles.php` script was executed via `curl` after temporarily disabling the administrator privilege check for local development purposes.  The administrator privilege check was subsequently restored.  Local build process testing revealed persistent 500 Internal Server Errors, resolved by creating custom autoloaders for Elementor Pro and the Hello Elementor theme, located at `app/public/wp-content/plugins/elementor-pro/vendor/autoload.php` and `app/public/wp-content/themes/hello-elementor/vendor/autoload.php`, respectively. A `wp-cli.phar` file was found in the project root and within the `wp-content` directory, suggesting multiple installations of WP CLI.  The local URL for the site was confirmed to be `http://localhost:10013` via examination of the LocalWP nginx configuration file.  The `reset-styles.php` script requires administrator privileges.  The administrator privilege check was temporarily disabled for local development and later restored.  LocalWP installation path confirmed as `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/`.  The LocalWP logs directory was confirmed to not exist at the expected location.  LocalWP logs are located at `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/logs/`.  References for LocalWP troubleshooting: [https://localwp.com/help-docs/](https://localwp.com/help-docs/) and WP Engine API: [https://wpengine.com/wp-engine-api/](https://wpengine.com/wp-engine-api/).  A `custom.css` file was found in the child theme, and a `elementor-reset.css` file has been added to the theme's `css` directory to reset Elementor's styles.  An `elementor-kit-settings.php` file was added to the child theme's root directory to view Elementor kit settings.  A `cleanup-elementor-styles.php` file was added to the child theme's root directory for cleaning up inline styles in Elementor elements.  `ELEMENTOR-STYLING-README.md` has been added to the project's root directory.
+
+
+## CODE STYLE
+(No information provided in the AI interaction to update this section)
+
+
+## FOLDER ORGANIZATION
+The project follows a standard WordPress structure, consistent with Local by Flywheel or Local WP:
+- `app/public`: Contains the main WordPress installation files.
+    - `wp-admin`: WordPress administration area.
+    - `wp-content`: Contains themes, plugins, and uploads.  Themes include Hello Elementor and a child theme. Plugins include: Advanced Custom Fields Pro, Autoupdater, Custom Typekit Fonts, Elementor, Elementor Pro, Gravity Forms, Gravity Forms Stripe, Insert Headers and Footers, Safe SVG, Simple History, and WP Mail SMTP.  A `css` subdirectory contains `variables.css`, `base-styles.css`, and `elementor-reset.css`. A `style-guide.md` file provides documentation for styling.  A `.logs` directory is also present.
+    - `wp-includes`: WordPress core files.
+- `app/sql`: Contains the database SQL dump (`local.sql`).
+- `conf`: Contains configuration files for the project's infrastructure (MySQL, Nginx, and PHP).
+- `app/logs`: Contains project logs (currently empty, according to initial investigation). Note:  `app/logs` directory does not currently exist. LocalWP logs are located in `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/logs/`.  The LocalWP logs directory was confirmed to not exist at the expected location.  LocalWP logs are located at `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/logs/`.
+- `app/public/wp-content/themes/hello-elementor-child`: Contains the child theme's files.  Includes `custom.css`, `variables.css`, `base-styles.css`, `elementor-kit-settings.php`, and `cleanup-elementor-styles.php`
+
+
+## TECH STACK
+- PHP
+- MySQL
+- Nginx
+- WordPress
+- Elementor
+- Elementor Pro
+- Advanced Custom Fields Pro
+- Gravity Forms
+- Gravity Forms Stripe
+- WP Mail SMTP
+- Safe SVG
+- Custom Typekit Fonts
+- Insert Headers and Footers
+- Simple History
+- Autoupdater
+- WP-CLI (installed via curl)
+- Node.js v23.5.0
+- 21st.dev Magic MCP (Cursor CLI client)
+- Cline (Cursor CLI client for VSCode)
+- Firecrawl MCP
+
+
+## PROJECT-SPECIFIC STANDARDS
+- **CSS Styling Hierarchy:** First-level styling should originate from CSS (or theme.json) to establish base styles.  These base styles can be overridden by custom CSS in the WordPress Customizer or by styling added via Elementor.  First-level styles should be visible in Elementor's editor and on the published page.
+- **Base Styles Location:** Base styles should be defined in dedicated CSS files (`css/variables.css` and `css/base-styles.css` within the child theme) and enqueued using WordPress functions.  This allows for a code-based approach to defining base styles, ensuring visibility in Elementor's editor and on the published page.
+- **Base Styles Enqueueing:** To ensure base styles are visible in the Elementor editor, use `add_action('elementor/editor/before_enqueue_scripts', 'enqueue_base_styles');`  This enqueues the styles within the Elementor editor context.  The `enqueue_css_variables` function ensures that `variables.css` is loaded before `base-styles.css` and other stylesheets.
+- **CSS Variable System**: The theme uses a CSS variable system defined in `app/public/wp-content/themes/hello-elementor-child/css/variables.css`.  A style guide documenting the variables and their usage is located at `app/public/wp-content/themes/hello-elementor-child/style-guide.md`.
+- **Style Guide Location:** A style guide is located at `app/public/wp-content/themes/hello-elementor-child/style-guide.md`. This guide details the CSS variable system and how to use it within Elementor and custom CSS.
+- **Enqueueing Priority:** To ensure base styles load before Elementor styles, use `add_action('wp_enqueue_scripts', 'enqueue_css_variables', 5);`  This ensures a priority of 5, loading earlier than other scripts.
+- **Gucci Style Emulation:** The site's styling should emulate the look and feel of Gucci.com, using primarily black and white colors, Futura PT font, and dark/light mode classes.
+- **Font Scale:** A formalized typographic scale, based on a perfect fourth ratio (1.333), has been implemented using CSS variables for consistent sizing across headings and body text.  See `css/variables.css` and `base-styles.css` for implementation.
+- **Theme System:** A light and dark theme system is implemented using `theme-light` and `theme-dark` classes.  Text inversion is handled with the `text-inverted` class.
+- **Elementor Button Font Consistency:** To ensure consistent font usage, add the following CSS to your theme's `custom.css` file or Elementor's Custom CSS: `.elementor-button { font-family: var(--font-primary); }`
+- **Elementor Style Reset**: Use the `elementor-reset.css` file to ensure consistent styling across all Elementor elements.  This file should be enqueued with a higher priority than other stylesheets to ensure it overrides Elementor's default styles.
+
+
+## WORKFLOW & RELEASE RULES
+- Utilize Git for version control.  The project should be initialized at the root level to include all WordPress files and directories.
+- Commit frequently with meaningful commit messages.
+- Use a branching strategy (e.g., Gitflow) to manage features and releases.
+- Regularly push changes to a private GitHub repository (RealFlyPilot/mbnyc).
+- Implement a robust deployment process to WP Engine, considering the use of `.wpe-pull-ignore` and `.wpe-push-ignore` files.
+- Document the deployment process in the project's README.md file.
+- Local testing should be performed using `http://localhost:10013`. Three PHP scripts (`reset-elementor.php`, `reset-customizer.php`, `reset-styles.php`) are available to reset Elementor, Customizer, and general styles.  The `reset-styles.php` script provides a comprehensive reset, clearing Elementor kits, global settings, CSS cache, Customizer settings, and regenerating CSS. Access via `http://localhost:10013/reset-styles.php`.  The `reset-styles.php` script requires administrator privileges to execute.  The `reset-styles.php` script was executed via `curl` after temporarily disabling the administrator privilege check for local development purposes.  The administrator privilege check was subsequently restored.  The `reset-styles.php` script was executed via `curl` after temporarily disabling the administrator privilege check for local development purposes. The administrator privilege check was subsequently restored.
+- Local build process testing should include verification of the local URL (`http://localhost:10013`) and checking for 500 Internal Server Errors.  Custom autoloaders for Elementor Pro and the Hello Elementor theme should be created and maintained at `app/public/wp-content/plugins/elementor-pro/vendor/autoload.php` and `app/public/wp-content/themes/hello-elementor/vendor/autoload.php`, respectively.
+
+## REFERENCE EXAMPLES
+- `app/public/wp-content/themes/hello-elementor-child/style-guide.md`
+- `app/public/wp-content/themes/hello-elementor-child/css/variables.css`
+- `app/public/wp-content/themes/hello-elementor-child/css/base-styles.css`
+- `app/public/reset-elementor.php`
+- `app/public/reset-customizer.php`
+- `app/public/reset-styles.php`
+- `~/.cursor/mcp.json`
+- `~/.cline/mcp_config.json`
+- RealFlyPilot/mbnyc README.md
+- `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/conf/nginx/site.conf`
+- `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/nginx/logs/error.log`
+- `app/public/wp-content/plugins/elementor-pro/vendor/autoload.php`
+- `app/public/wp-content/themes/hello-elementor/vendor/autoload.php`
+- `/Users/mlovascio/Local Sites/mbnycfitness/wp-cli.phar`
+- `/Users/mlovascio/Local Sites/mbnycfitness/app/public/wp-content/wp-cli.phar`
+- `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/logs/`
+- [https://localwp.com/help-docs/](https://localwp.com/help-docs/)
+- [https://wpengine.com/wp-engine-api/](https://wpengine.com/wp-engine-api/)
+- `app/public/wp-content/themes/hello-elementor-child/css/elementor-reset.css`
+- `app/public/wp-content/themes/hello-elementor-child/elementor-kit-settings.php`
+- `app/public/wp-content/themes/hello-elementor-child/cleanup-elementor-styles.php`
+- `ELEMENTOR-STYLING-README.md`
+
+
+## PROJECT DOCUMENTATION & CONTEXT SYSTEM
+- `app/public/wp-content/themes/hello-elementor-child/style-guide.md`
+- `app/public/wp-content/themes/hello-elementor-child/css/variables.css`
+- `app/public/wp-content/themes/hello-elementor-child/css/base-styles.css`
+- `~/.cursor/mcp.json`
+- `~/.cline/mcp_config.json`
+- RealFlyPilot/mbnyc README.md
+- `ELEMENTOR-STYLING-README.md`
+
+
+## DEBUGGING
+- 500 Internal Server Error encountered during initial local testing at `http://localhost:10013`.  PHP and Nginx logs were empty. Further investigation revealed a fatal error in the Elementor Pro plugin due to missing dependencies. The error log was initially empty but the error was visible in the browser's response: `Fatal error: Uncaught Error: Class "ElementorProDeps\DI\Container" not found in /Users/mlovascio/Local Sites/mbnycfitness/app/public/wp-content/plugins/elementor-pro/vendor/php-di/php-di/src/ContainerBuilder.php:155`.  The LocalWP installation's site URL was confirmed to be `http://localhost:10013` through examination of the `site.conf` file within the LocalWP nginx configuration directory.  The issue was resolved by creating a custom autoloader for the Elementor Pro plugin's `vendor_prefixed` directory.  A subsequent error in the Hello Elementor theme was resolved by creating a similar autoloader for the theme.  Style inconsistencies were addressed by running the `reset-styles.php` script, which resets Elementor and Customizer settings, clears caches, and regenerates CSS.  Further debugging revealed font inconsistencies in Elementor buttons, potentially due to conflicting styles or cached settings.  The `reset-styles.php` script was run to address this issue, resulting in the resolution of the font inconsistencies.  A custom autoloader was created for `ElementorProDeps` namespace, handling dependencies for Elementor Pro and located at `app/public/wp-content/plugins/elementor-pro/vendor/autoload.php`. A similar autoloader was created for the `Elementor\WPNotificationsPackage\V110` namespace in the Hello Elementor theme and located at `app/public/wp-content/themes/hello-elementor/vendor/autoload.php`. A 500 Internal Server Error was resolved. The `app/logs` directory was confirmed to be absent. LocalWP logs are located in `/Users/mlovascio/Library/Application Support/Local/run/94M468Htj/logs/`.  Persistent 500 Internal Server Errors during local build process testing were resolved by creating custom autoloaders for Elementor Pro and the Hello Elementor theme.  The `reset-styles.php` script was used to address style inconsistencies.  The `reset-styles.php` script requires administrator privileges and was temporarily modified to bypass this check for local development. The authentication check was later restored.  A 200 OK status code was achieved after resolving the dependency issues and clearing caches.  Further font inconsistencies were observed in Elementor buttons.  The `reset-styles.php` script requires administrator privileges and was temporarily modified to bypass this check for local development. The authentication check was later restored. A 200 OK status code was achieved after resolving the dependency issues and clearing caches.  The `elementor-kit-settings.php` script can be used to view the active Elementor kit settings.  The `cleanup-elementor-styles.php` script can be used to remove inline styles from Elementor elements.
+
+
+## FINAL DOs AND DON'Ts
+(No information provided in the AI interaction to update this section)

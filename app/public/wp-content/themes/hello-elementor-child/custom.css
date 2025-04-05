@@ -1,7 +1,23 @@
-/*
-COMMENTED OUT - Using new CSS variable system instead
+/**
+ * Custom Site Styles
+ * 
+ * Add your site-specific custom styles here.
+ * This file is loaded after all other stylesheets, so it has the highest specificity.
+ */
 
-Base Typography styles and all other styles have been moved to the new CSS variable system.
-See /css/variables.css and /css/base-styles.css for the new implementation.
-This file is kept for reference but has been completely commented out.
-*/
+/* Global custom styles */
+
+
+/* Header styles */
+
+
+/* Footer styles */
+
+
+/* Page-specific styles */
+
+
+/* Custom component styles */
+
+
+/* Add your custom styles here */ 
