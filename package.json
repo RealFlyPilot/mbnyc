@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "MBNYC WordPress site",
   "scripts": {
-    "test": "echo \"No tests configured\""
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:basic": "playwright test basic.spec.js",
+    "test:whitespace": "playwright test whitespace-check.spec.js",
+    "test:errors": "playwright test error-logging.spec.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +20,13 @@
   ],
   "author": "Mike Lovascio",
   "license": "UNLICENSED",
-  "private": true
-} 
+  "private": true,
+  "main": "monitor-workflow.js",
+  "bugs": {
+    "url": "https://github.com/mlovascio/mbnyc/issues"
+  },
+  "homepage": "https://github.com/mlovascio/mbnyc#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.42.1"
+  }
+}
