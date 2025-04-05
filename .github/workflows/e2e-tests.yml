@@ -1,0 +1,64 @@
+name: End-to-End Tests
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to test'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - local
+          - staging
+
+jobs:
+  test:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci || npm install
+      
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+      
+      - name: Run tests
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "local" ]; then
+            sed -i 's/mbnycd.wpenginepowered.com/mbnyc.local/g' tests/basic.spec.js tests/whitespace-check.spec.js
+            npx playwright test
+          elif [ "${{ github.event.inputs.environment }}" = "staging" ]; then
+            sed -i 's/https:\/\/mbnyc.local\//https:\/\/mbnycd.wpenginepowered.com\//g' tests/basic.spec.js tests/whitespace-check.spec.js tests/error-logging.spec.js
+            npx playwright test basic.spec.js whitespace-check.spec.js
+          else
+            npx playwright test
+          fi
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            tests/*-page.html
+            tests/*-screenshot.png
+            tests/*-error-page.html
+            tests/*-error-screenshot.png
+            tests/*-debug.log
+            test-results/
+          retention-days: 7 

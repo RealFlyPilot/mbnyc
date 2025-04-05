@@ -1,0 +1,132 @@
+name: WP Engine Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci || npm install
+      
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+      
+      - name: Run whitespace tests on local site
+        run: npx playwright test whitespace-check.spec.js
+        continue-on-error: true
+
+  deploy:
+    name: Deploy to WP Engine
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set deployment target
+        id: set-target
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
+            echo "target=production" >> $GITHUB_OUTPUT
+            echo "wp_env=production" >> $GITHUB_OUTPUT
+          else
+            echo "target=staging" >> $GITHUB_OUTPUT
+            echo "wp_env=staging" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Enable debugging in wp-config.php
+        run: |
+          # Create a temporary copy of wp-config.php for deployment
+          cp app/public/wp-config.php app/public/wp-config-deploy.php
+          
+          # Add debugging flags appropriate for the environment
+          if [ "${{ steps.set-target.outputs.wp_env }}" = "staging" ]; then
+            # Enable detailed debugging on staging
+            sed -i 's/define( '\''WP_DEBUG'\'', false )/define( '\''WP_DEBUG'\'', true )/g' app/public/wp-config-deploy.php
+            sed -i 's/define( '\''WP_DEBUG_LOG'\'', false )/define( '\''WP_DEBUG_LOG'\'', true )/g' app/public/wp-config-deploy.php
+            sed -i 's/define( '\''WP_DEBUG_DISPLAY'\'', true )/define( '\''WP_DEBUG_DISPLAY'\'', false )/g' app/public/wp-config-deploy.php
+          else
+            # Minimal debugging on production
+            sed -i 's/define( '\''WP_DEBUG'\'', true )/define( '\''WP_DEBUG'\'', false )/g' app/public/wp-config-deploy.php
+            sed -i 's/define( '\''WP_DEBUG_LOG'\'', true )/define( '\''WP_DEBUG_LOG'\'', true )/g' app/public/wp-config-deploy.php
+            sed -i 's/define( '\''WP_DEBUG_DISPLAY'\'', true )/define( '\''WP_DEBUG_DISPLAY'\'', false )/g' app/public/wp-config-deploy.php
+          fi
+          
+          # Rename the file to wp-config.php
+          mv app/public/wp-config-deploy.php app/public/wp-config.php
+      
+      - name: Deploy to WP Engine
+        uses: wpengine/github-action-wpe-site-deploy@v3
+        with:
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          WPE_ENV: ${{ steps.set-target.outputs.target }}
+          SRC_PATH: "app/public"
+          REMOTE_PATH: "wp-content/"
+          FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.wpe-push-ignore
+
+  post-deploy:
+    name: Post-Deployment Tasks
+    needs: deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci || npm install
+      
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+      
+      - name: Run tests against deployed site
+        run: |
+          # Update test files to target the deployed site
+          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
+            sed -i 's/https:\/\/mbnycd.wpenginepowered.com\//https:\/\/mbnyc.wpengine.com\//g' tests/basic.spec.js tests/whitespace-check.spec.js
+          fi
+          
+          # Run only the whitespace test
+          npx playwright test whitespace-check.spec.js
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-deploy-test-results
+          path: |
+            tests/*-page.html
+            tests/*-screenshot.png
+            tests/*-error-page.html
+            tests/*-error-screenshot.png
+          retention-days: 7 
