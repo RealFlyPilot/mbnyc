@@ -1,5 +1,7 @@
 # WordPress Project for WPEngine
 
+> **IMPORTANT: For a more organized documentation experience, please see [PROJECT-OVERVIEW.md](PROJECT-OVERVIEW.md) which provides clear navigation to all documentation, including the [child theme documentation](app/public/wp-content/themes/hello-elementor-child/README.md).**
+
 ## Project Structure
 
 This repository contains a WordPress site with the following structure:
