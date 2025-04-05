@@ -19,16 +19,25 @@ The style sync automation consists of several components:
 - Access to GitHub repository with appropriate permissions
 - GitHub Personal Access Token with `repo` and `workflow` scopes
 
-### Setup
+### Initial Setup After Cloning
 
-1. Clone the repository and install dependencies:
+1. Clone the repository and navigate to the project:
    ```bash
    git clone https://github.com/RealFlyPilot/mbnyc.git
    cd mbnyc
+   ```
+
+2. Create required directories with the setup script:
+   ```bash
+   ./setup-dirs.sh
+   ```
+
+3. Install dependencies:
+   ```bash
    npm install
    ```
 
-2. Set up GitHub token for API authentication:
+4. Set up GitHub token for API authentication:
    ```bash
    ./setup-github-token.sh
    ```
@@ -92,6 +101,13 @@ Sets up authentication for GitHub API access.
 ### `check-and-deploy.sh`
 
 Checks deployment status and runs reset scripts locally.
+
+### `setup-dirs.sh`
+
+Creates necessary directories for the style sync automation system:
+- `temp-scripts`: Used for temporary script storage during deployment
+- `env-comparison`: Stores environment comparison reports
+- `test-screenshots`: Stores screenshots of the site for testing
 
 ## Reset Scripts
 
