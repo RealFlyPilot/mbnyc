@@ -49,7 +49,7 @@ async function fixStagingEnvironment() {
   
   // First, confirm that the staging site has issues
   log('Verifying staging site issues...');
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
   
   try {
     // Step 1: Check if staging site is actually broken

@@ -27,7 +27,7 @@ const dateTime = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '')
 
 async function compareEnvironments() {
   console.log('Starting environment comparison...');
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ headless: true });
   const results = {
     timestamp: new Date().toISOString(),
     environments: {},
