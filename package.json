@@ -12,7 +12,8 @@
     "compare": "node tools/compare-environments.js",
     "fix:staging": "node tools/apply-local-fixes-to-staging.js",
     "diagnosis": "node tools/generate-diagnosis-report.js",
-    "quick-check": "node tests/headless-check.js"
+    "quick-check": "node tests/headless-check.js",
+    "fix": "node tools/wp-engine-fix.js"
   },
   "repository": {
     "type": "git",
