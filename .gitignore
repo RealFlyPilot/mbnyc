@@ -1,0 +1,54 @@
+# WordPress core files
+app/public/wp-admin
+app/public/wp-includes
+app/public/wp-content/languages
+app/public/wp-content/uploads
+app/public/wp-content/upgrade
+app/public/index.php
+app/public/license.txt
+app/public/readme.html
+app/public/wp-*.php
+app/public/xmlrpc.php
+
+# WordPress configuration
+app/public/wp-config.php
+
+# Log files
+logs/
+*.log
+
+# Local development
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# LocalWP specific files
+conf/
+app/sql/
+
+# WordPress plugins
+app/public/wp-content/plugins/
+# Keep custom plugins
+!app/public/wp-content/plugins/custom-plugin-1/
+!app/public/wp-content/plugins/custom-plugin-2/
+
+# WordPress themes
+app/public/wp-content/themes/*
+# Keep only your custom theme
+!app/public/wp-content/themes/hello-elementor-child/
+!app/public/wp-content/themes/hello-elementor/
+
+# Package managers
+node_modules/
+vendor/
+composer.lock
+package-lock.json
+yarn.lock
+
+# Build files
+.sass-cache/
+.npm
+.grunt
+dist/
+build/ 

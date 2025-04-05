@@ -1,0 +1,59 @@
+name: Deploy to WP Engine - Staging
+
+env:
+  WPE_SSHG_KEY_PRIVATE: ${{ secrets.DEPLOY_WPENGINE_SSH_KEY_PRIVATE }}
+  WPE_ENV: "fpstarters"
+  WPE_CACHE_CLEAR: TRUE
+  WPE_SRC_PATH: "wp-content/themes/fp-starter"
+  WPE_CHILD_RESOURCES_SRC_PATH: "wp-content/themes/fp-starter/child-resources"
+  WPE_CHILD_SRC_PATH: "wp-content/themes/fp-starter-child"
+
+on:
+  push:
+    branches:
+      - staging
+jobs:
+  build-fp-starter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+      #- name: Parent - Install composer dependencies
+      #  run: composer install
+      #  working-directory: ${{env.WPE_SRC_PATH}}
+      - name: Parent - Install dependencies
+        run: npm ci
+        working-directory: ${{env.WPE_SRC_PATH}}
+      - name: Parent - Compile assets with npm mix
+        run: npx mix --production # Run the command to compile assets for production
+        working-directory: ${{env.WPE_SRC_PATH}}
+      - name: Parent - Remove node_modules folder
+        run: rm -rf ${{env.WPE_SRC_PATH}}/node_modules
+
+      #- name: Child - Install composer dependencies
+      #  run: composer install
+      #  working-directory: ${{env.WPE_CHILD_SRC_PATH}}
+      - name: Child resources - Install dependencies in child resources folder - for use with npx mix in that folder
+        run: npm ci
+        working-directory: ${{env.WPE_CHILD_RESOURCES_SRC_PATH}}
+      - name: Child - Install dependencies in child theme - required for tsconfig to run properly when compiling assets from child-resource webpack
+        run: npm ci
+        working-directory: ${{env.WPE_CHILD_SRC_PATH}}
+      - name: Child resources - Compile assets with npm mix for child theme from parent theme
+        run: npx mix --production # Run the command to compile assets for production
+        working-directory: ${{env.WPE_CHILD_RESOURCES_SRC_PATH}}
+      - name: Child resources - Remove node_modules folder in child resources folder
+        run: rm -rf ${{env.WPE_CHILD_RESOURCES_SRC_PATH}}/node_modules
+      - name: Child - Remove node_modules folder in child theme
+        run: rm -rf ${{env.WPE_CHILD_SRC_PATH}}/node_modules
+      - name: GitHub Action Deploy to WP Engine
+        uses: wpengine/github-action-wpe-site-deploy@v3
+        with:
+          WPE_SSHG_KEY_PRIVATE: ${{ env.WPE_SSHG_KEY_PRIVATE }}
+          WPE_ENV: ${{env.WPE_ENV}}
+          CACHE_CLEAR: ${{env.WPE_CACHE_CLEAR}}

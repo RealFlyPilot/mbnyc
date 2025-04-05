@@ -1,0 +1,4 @@
+wp-content/themes/*/patterns/
+wp-content/themes/*/parts/
+wp-content/themes/*/templates/
+wp-content/themes/*/acfblocks/*/acf-fields.json
