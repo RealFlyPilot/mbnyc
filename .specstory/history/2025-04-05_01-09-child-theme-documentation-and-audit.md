@@ -1769,7 +1769,358 @@ Let's fix the uncommitted changes:
 
 ---
 
+```bash
+git add .cursor/rules/derived-cursor-rules.mdc app/public/wp-content/themes/hello-elementor-child/style.css app/public/wp-content/themes/hello-elementor-child/assets/css/main.css
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % 
+
+```
+
+---
+
+Let's commit these additional changes:
+
+---
+
+```bash
+git commit -m "Add remaining modified files to documentation update"
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git commit -m "Add remaining modified files to documentation update"
+[feature/documentation-updates b37e001] Add remaining modified files to documentation update
+ 3 files changed, 338 insertions(+), 10 deletions(-)
+ create mode 100644 app/public/wp-content/themes/hello-elementor-child/assets/css/main.css
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+Push these additional changes:
+
+---
+
+```bash
+git push origin feature/documentation-updates
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git push origin feature/documentation-updates
+Enumerating objects: 26, done.
+Counting objects: 100% (26/26), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (11/11), done.
+Writing objects: 100% (14/14), 5.33 KiB | 5.33 MiB/s, done.
+Total 14 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (5/5), completed with 5 local objects.
+remote: 
+remote: GitHub found 1 vulnerability on RealFlyPilot/mbnyc's default branch (1 high). To find out more, visi
+t:
+remote:      https://github.com/RealFlyPilot/mbnyc/security/dependabot/1
+remote: 
+To https://github.com/RealFlyPilot/mbnyc.git
+   f24faaa..b37e001  feature/documentation-updates -> feature/documentation-updates
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+We still have some .specstory files that weren't committed. Let's tell git to ignore these:
+
+---
+
+```bash
+git status
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git status
+On branch feature/documentation-updates
+Your branch is up to date with 'origin/feature/documentation-updates'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-08-14-955Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-14-16-212Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-18-16-681Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-24-16-828Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-30-17-381Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-32-18-172Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-38-19-446Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-40-20-892Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-42-17-628Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-44-17-331Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-48-18-217Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-50-17-670Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-58-17-835Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-02-18-722Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-06-19-989Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-08-20-767Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-13-40-566Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-15-11-254Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-16-11-613Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-23-29-852Z
+        .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-27-54-887Z
+        .specstory/history/2025-04-04_23-49-migrating-localwp-instance-to-github.md
+        .specstory/history/2025-04-05_00-17-wordpress-migration-to-github-discussion.md
+        .specstory/history/2025-04-05_00-38-continuing-wordpress-migration-discussion.md
+        .specstory/history/2025-04-05_00-42-ai-documentation-for-progressive-disclosure.md
+        .specstory/history/2025-04-05_00-56-documenting-progress-and-feature-branch-updates.md
+        .specstory/history/2025-04-05_01-09-child-theme-documentation-and-audit.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+Let's add a .gitignore rule for .specstory files since these appear to be generated files:
+
+---
+
+Read file: .gitignore
+
+---
+
+Let's add a rule for .specstory files to the .gitignore file:
+
+---
+
 Cancelled
+
+---
+
+_**User**_
+
+i actually don't want to ignor ethose 
+
+---
+
+they're all related to the work we're doing 
+
+---
+
+_**Assistant**_
+
+
+
+---
+
+Let's add those .specstory files to our commit since they're relevant to the documentation work:
+
+---
+
+```bash
+git add .specstory/
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % 
+
+```
+
+---
+
+Now let's commit these files:
+
+---
+
+```bash
+git commit -m "Add documentation history and backups"
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git commit -m "Add documentation history and backups"
+[feature/documentation-updates 52168e0] Add documentation history and backups
+ 28 files changed, 8735 insertions(+)
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-08-14-955Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-14-16-212Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-18-16-681Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-24-16-828Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-30-17-381Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-32-18-172Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-38-19-446Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-40-20-892Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-42-17-628Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-44-17-331Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-48-18-217Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-50-17-670Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T00-58-17-835Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-02-18-722Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-06-19-989Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-08-20-767Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-13-40-566Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-15-11-254Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-16-11-613Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-23-29-852Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-27-54-887Z
+ create mode 100644 .specstory/cursor_rules_backups/derived-cursor-rules.mdc.2025-04-05T01-29-56-066Z
+ create mode 100644 .specstory/history/2025-04-04_23-49-migrating-localwp-instance-to-github.md
+ create mode 100644 .specstory/history/2025-04-05_00-17-wordpress-migration-to-github-discussion.md
+ create mode 100644 .specstory/history/2025-04-05_00-38-continuing-wordpress-migration-discussion.md
+ create mode 100644 .specstory/history/2025-04-05_00-42-ai-documentation-for-progressive-disclosure.md
+ create mode 100644 .specstory/history/2025-04-05_00-56-documenting-progress-and-feature-branch-updates.md
+ create mode 100644 .specstory/history/2025-04-05_01-09-child-theme-documentation-and-audit.md
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+Let's push these changes to the feature branch:
+
+---
+
+```bash
+git push origin feature/documentation-updates
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git push origin feature/documentation-updates
+Enumerating objects: 37, done.
+Counting objects: 100% (37/37), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (33/33), done.
+Writing objects: 100% (33/33), 49.96 KiB | 8.33 MiB/s, done.
+Total 33 (delta 26), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (26/26), completed with 1 local object.
+remote: 
+remote: GitHub found 1 vulnerability on RealFlyPilot/mbnyc's default branch (1 high). To find out more, visi
+t:
+remote:      https://github.com/RealFlyPilot/mbnyc/security/dependabot/1
+remote: 
+To https://github.com/RealFlyPilot/mbnyc.git
+   b37e001..52168e0  feature/documentation-updates -> feature/documentation-updates
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+Now let's verify our working directory is clean and then try running the deployment script:
+
+---
+
+```bash
+git status
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git status
+On branch feature/documentation-updates
+Your branch is up to date with 'origin/feature/documentation-updates'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .cursor/rules/derived-cursor-rules.mdc
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+Let's add and commit the derived-cursor-rules.mdc file as well:
+
+---
+
+```bash
+git add .cursor/rules/derived-cursor-rules.mdc
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % 
+
+```
+
+---
+
+```bash
+git commit -m "Update cursor rules"
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git commit -m "Update cursor rules"
+[feature/documentation-updates c40b502] Update cursor rules
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+```bash
+git push origin feature/documentation-updates
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % git push origin feature/documentation-updates
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (5/5), 492 bytes | 492.00 KiB/s, done.
+Total 5 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote: 
+remote: GitHub found 1 vulnerability on RealFlyPilot/mbnyc's default branch (1 high). To find out more, visi
+t:
+remote:      https://github.com/RealFlyPilot/mbnyc/security/dependabot/1
+remote: 
+To https://github.com/RealFlyPilot/mbnyc.git
+   52168e0..c40b502  feature/documentation-updates -> feature/documentation-updates
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
+
+---
+
+Now let's try running the deployment script again:
+
+---
+
+```bash
+./deploy.sh feature/documentation-updates dev
+```
+
+```
+mlovascio@Mikes-MacBook-Pro mbnyc % ./deploy.sh feature/documentation-updates dev
+=== Starting Safe Deployment Process ===
+Feature branch: feature/documentation-updates
+Target branch: dev
+
+Fetching latest changes...
+
+Switching to feature branch and running pre-deployment checks...
+Already on 'feature/documentation-updates'
+Your branch is up to date with 'origin/feature/documentation-updates'.
+Running pre-deployment checks for dev...
+
+Checking current branch...
+✓ PASS: On a feature/bugfix branch (feature/documentation-updates)
+
+Checking git status...
+✓ PASS: Git status is clean
+
+Checking PHP syntax...
+⚠ WARNING: PHP not found, skipping PHP syntax check
+
+Checking CSS syntax...
+⚠ WARNING: stylelint not found, skipping CSS syntax check
+
+Checking WordPress debug settings...
+✗ FAIL: wp-config.php not found in /Users/mlovascio/GitHub/mbnyc/app/public
+
+Checking for required CSS files...
+✓ PASS: All required CSS files exist
+
+Checking WordPress database connection...
+⚠ WARNING: WP-CLI not found, skipping WordPress database check
+
+========== Pre-Deployment Check Summary ==========
+❌ Some checks failed. Fix issues before deploying to dev.
+Pre-deployment checks failed on feature branch. Fix issues before deploying.
+mlovascio@Mikes-MacBook-Pro mbnyc %
+```
 
 ---
 
