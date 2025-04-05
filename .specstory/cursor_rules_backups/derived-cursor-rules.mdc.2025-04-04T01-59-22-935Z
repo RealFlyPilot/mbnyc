@@ -1,0 +1,47 @@
+
+## PROJECT OVERVIEW
+This project is a WordPress website, confirmed by the directory structure (specifically `app/public/wp-admin`, `app/public/wp-content`, `app/public/wp-includes`) and the presence of a database dump (`app/sql/local.sql`). The project uses a Local by Flywheel or Local WP directory structure, a common local WordPress development environment.  Files `.wpe-pull-ignore` and `.wpe-push-ignore` suggest potential deployment to WP Engine hosting.  No `package.json` was found, indicating it is not a Node.js based project. The `conf` directory contains configuration files for MySQL, Nginx, and PHP.
+
+
+## CODE STYLE
+(No information provided in the AI interaction to update this section)
+
+
+## FOLDER ORGANIZATION
+The project follows a standard WordPress structure, consistent with Local by Flywheel or Local WP:
+- `app/public`: Contains the main WordPress installation files.
+    - `wp-admin`: WordPress administration area.
+    - `wp-content`: Contains themes, plugins, and uploads.  Further investigation of this folder's contents is needed.
+    - `wp-includes`: WordPress core files.
+- `app/sql`: Contains the database SQL dump (`local.sql`).
+- `conf`: Contains configuration files for the project's infrastructure (MySQL, Nginx, and PHP).
+
+
+## TECH STACK
+- PHP
+- MySQL
+- Nginx
+- WordPress
+
+## PROJECT-SPECIFIC STANDARDS
+(No information provided in the AI interaction to update this section)
+
+
+## WORKFLOW & RELEASE RULES
+(No information provided in the AI interaction to update this section)
+
+
+## REFERENCE EXAMPLES
+(No information provided in the AI interaction to update this section)
+
+
+## PROJECT DOCUMENTATION & CONTEXT SYSTEM
+(No information provided in the AI interaction to update this section)
+
+
+## DEBUGGING
+(No information provided in the AI interaction to update this section)
+
+
+## FINAL DOs AND DON'Ts
+(No information provided in the AI interaction to update this section)

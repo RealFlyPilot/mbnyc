@@ -1,0 +1,60 @@
+
+## PROJECT OVERVIEW
+This project is a WordPress website, confirmed by the directory structure (specifically `app/public/wp-admin`, `app/public/wp-content`, `app/public/wp-includes`) and the presence of a database dump (`app/sql/local.sql`). The project uses a Local by Flywheel or Local WP directory structure, a common local WordPress development environment.  Files `.wpe-pull-ignore` and `.wpe-push-ignore` suggest potential deployment to WP Engine hosting.  No `package.json` was found, indicating it is not a Node.js based project. The `conf` directory contains configuration files for MySQL, Nginx, and PHP.  The `wp-content` directory contains: `mu-plugins`, `plugins`, `themes`, `uploads`, `upgrade`, `upgrade-temp-backup`.  Plugins include: Advanced Custom Fields Pro, Autoupdater, Custom Typekit Fonts, Elementor, Elementor Pro, Gravity Forms, Gravity Forms Stripe, Insert Headers and Footers, Safe SVG, Simple History, and WP Mail SMTP. The primary theme is Hello Elementor, with a child theme containing custom CSS and a modified Elementor button type.  The child theme includes a `custom.css` file (7.6KB) and adds an "Inverted" button type to Elementor.
+
+
+## CODE STYLE
+(No information provided in the AI interaction to update this section)
+
+
+## FOLDER ORGANIZATION
+The project follows a standard WordPress structure, consistent with Local by Flywheel or Local WP:
+- `app/public`: Contains the main WordPress installation files.
+    - `wp-admin`: WordPress administration area.
+    - `wp-content`: Contains themes, plugins, and uploads.  Themes include Hello Elementor and a child theme. Plugins include: Advanced Custom Fields Pro, Autoupdater, Custom Typekit Fonts, Elementor, Elementor Pro, Gravity Forms, Gravity Forms Stripe, Insert Headers and Footers, Safe SVG, Simple History, and WP Mail SMTP.
+    - `wp-includes`: WordPress core files.
+- `app/sql`: Contains the database SQL dump (`local.sql`).
+- `conf`: Contains configuration files for the project's infrastructure (MySQL, Nginx, and PHP).
+
+
+## TECH STACK
+- PHP
+- MySQL
+- Nginx
+- WordPress
+- Elementor
+- Elementor Pro
+- Advanced Custom Fields Pro
+- Gravity Forms
+- Gravity Forms Stripe
+- WP Mail SMTP
+- Safe SVG
+- Custom Typekit Fonts
+- Insert Headers and Footers
+- Simple History
+- Autoupdater
+
+
+## PROJECT-SPECIFIC STANDARDS
+- **CSS Styling Hierarchy:** First-level styling should originate from CSS (or theme.json) to establish base styles.  These base styles can be overridden by custom CSS in the WordPress Customizer or by styling added via Elementor.  First-level styles should be visible in Elementor's editor and on the published page.
+- **Base Styles Location:** Base styles should be defined in a dedicated CSS file (e.g., `css/variables.css` within the child theme) and enqueued using WordPress functions.  This allows for a code-based approach to defining base styles, ensuring visibility in Elementor's editor and on the published page.
+
+
+## WORKFLOW & RELEASE RULES
+(No information provided in the AI interaction to update this section)
+
+
+## REFERENCE EXAMPLES
+(No information provided in the AI interaction to update this section)
+
+
+## PROJECT DOCUMENTATION & CONTEXT SYSTEM
+(No information provided in the AI interaction to update this section)
+
+
+## DEBUGGING
+(No information provided in the AI interaction to update this section)
+
+
+## FINAL DOs AND DON'Ts
+(No information provided in the AI interaction to update this section)
