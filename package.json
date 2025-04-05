@@ -11,7 +11,8 @@
     "test:errors": "playwright test error-logging.spec.js",
     "compare": "node tools/compare-environments.js",
     "fix:staging": "node tools/apply-local-fixes-to-staging.js",
-    "diagnosis": "node tools/generate-diagnosis-report.js"
+    "diagnosis": "node tools/generate-diagnosis-report.js",
+    "quick-check": "node tests/headless-check.js"
   },
   "repository": {
     "type": "git",
