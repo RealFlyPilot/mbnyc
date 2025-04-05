@@ -393,6 +393,10 @@ function diagnoseProblem(stagingReport, comparison) {
 }
 
 function generateHtmlReport(report) {
+  // Add safe defaults for missing values
+  const localScreenshot = report.local.screenshot || './not-available.png';
+  const stagingScreenshot = report.staging.screenshot || './not-available.png';
+  
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -604,12 +608,12 @@ function generateHtmlReport(report) {
   <div class="screenshots">
     <div class="screenshot">
       <h3>Local Environment</h3>
-      <img src="${path.basename(report.local.screenshot)}" alt="Local screenshot">
+      <img src="${path.basename(localScreenshot)}" alt="Local screenshot">
     </div>
     
     <div class="screenshot">
       <h3>Staging Environment</h3>
-      <img src="${path.basename(report.staging.screenshot)}" alt="Staging screenshot">
+      <img src="${path.basename(stagingScreenshot)}" alt="Staging screenshot">
     </div>
   </div>
   
