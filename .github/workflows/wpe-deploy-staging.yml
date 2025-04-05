@@ -1,4 +1,4 @@
-name: Deploy to WP Engine Staging
+name: WP Engine Deployment - Staging
 
 on:
   push:
@@ -13,11 +13,15 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Deploy to WP Engine Staging
+      - name: PHP Lint
+        run: |
+          find app/public/wp-content -name "*.php" -type f -print0 | xargs -0 -n1 php -l
+      
+      - name: Deploy to WP Engine
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
-          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPENGINE_SSH_PRIVATE_KEY }}
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
           WPE_ENV: mbnycs
           REMOTE_PATH: "wp-content/"
-          PHP_LINT: TRUE
-          FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.wpe-push-ignore 
+          FLAGS: -azvr --inplace --delete --exclude=".*" --exclude-from=.deployignore
+          PHP_LINT: false 

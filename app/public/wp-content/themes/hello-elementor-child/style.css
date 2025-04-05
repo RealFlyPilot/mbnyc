@@ -11,7 +11,229 @@ License: GNU General Public License v3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 */
 
-/* 
-Note: Most styles are loaded from CSS files in the /css/ directory. 
-See functions.php for the loading order. 
-*/
+/* CSS Variables */
+:root {
+  /* Typography */
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+  
+  /* Scale (Perfect Fourth - 1.333) */
+  --scale-000: 0.422rem;   /* 6.752px */
+  --scale-00: 0.563rem;    /* 9.008px */
+  --scale-0: 0.75rem;      /* 12px */
+  --scale-1: 1rem;         /* 16px (base) */
+  --scale-2: 1.333rem;     /* 21.328px */
+  --scale-3: 1.777rem;     /* 28.432px */
+  --scale-4: 2.369rem;     /* 37.904px */
+  --scale-5: 3.157rem;     /* 50.512px */
+  
+  /* Font Families */
+  --font-family-heading: "Futura PT", sans-serif;
+  --font-family-body: system-ui, -apple-system, sans-serif;
+  
+  /* Colors */
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+  
+  /* Grays */
+  --color-gray-100: #F7F7F7;
+  --color-gray-200: #E6E6E6;
+  --color-gray-300: #CCCCCC;
+  --color-gray-400: #B3B3B3;
+  --color-gray-500: #999999;
+  --color-gray-600: #808080;
+  --color-gray-700: #666666;
+  --color-gray-800: #4D4D4D;
+  --color-gray-900: #333333;
+  
+  /* Theme Colors */
+  --color-primary: var(--color-black);
+  --color-background: var(--color-white);
+  --color-text: var(--color-black);
+  --color-text-muted: var(--color-gray-600);
+  
+  /* Spacing */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;    /* 4px */
+  --spacing-2: 0.5rem;     /* 8px */
+  --spacing-3: 0.75rem;    /* 12px */
+  --spacing-4: 1rem;       /* 16px */
+  --spacing-5: 1.5rem;     /* 24px */
+  --spacing-6: 2rem;       /* 32px */
+  --spacing-7: 2.5rem;     /* 40px */
+  --spacing-8: 3rem;       /* 48px */
+  --spacing-9: 4rem;       /* 64px */
+  --spacing-10: 8rem;      /* 128px */
+  
+  /* Layout */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --grid-gap: var(--spacing-4);
+  --grid-columns: 12;
+  
+  /* Transitions */
+  --transition-fast: 150ms;
+  --transition-base: 300ms;
+  --transition-slow: 500ms;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Base Styles */
+html {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family-body);
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  line-height: 1.1;
+  margin-top: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
+}
+
+h1 { font-size: var(--scale-5); }
+h2 { font-size: var(--scale-4); }
+h3 { font-size: var(--scale-3); }
+h4 { font-size: var(--scale-2); }
+h5 { font-size: var(--scale-1); }
+h6 { font-size: var(--scale-0); }
+
+p {
+  margin-bottom: var(--spacing-4);
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-base) var(--ease-out);
+}
+
+a:hover {
+  color: var(--color-text-muted);
+}
+
+/* Layout */
+.container {
+  width: 100%;
+  max-width: var(--container-lg);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+.grid {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+}
+
+/* Buttons */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  font-family: var(--font-family-heading);
+  font-size: var(--scale-1);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-text);
+  transition: all var(--transition-base) var(--ease-out);
+  cursor: pointer;
+}
+
+.button:hover {
+  color: var(--color-background);
+  background-color: var(--color-text);
+}
+
+/* Theme Modes */
+.theme-light {
+  --color-primary: var(--color-black);
+  --color-background: var(--color-white);
+  --color-text: var(--color-black);
+}
+
+.theme-dark {
+  --color-primary: var(--color-white);
+  --color-background: var(--color-black);
+  --color-text: var(--color-white);
+}
+
+/* Elementor Overrides */
+.elementor-section {
+  padding: var(--spacing-6) 0;
+}
+
+.elementor-heading-title {
+  font-family: var(--font-family-heading);
+}
+
+.elementor-button {
+  font-family: var(--font-family-heading);
+  transition: all var(--transition-base) var(--ease-out);
+}
+
+/* Utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-0 { margin-top: var(--spacing-0); }
+.mb-0 { margin-bottom: var(--spacing-0); }
+.ml-0 { margin-left: var(--spacing-0); }
+.mr-0 { margin-right: var(--spacing-0); }
+
+.pt-0 { padding-top: var(--spacing-0); }
+.pb-0 { padding-bottom: var(--spacing-0); }
+.pl-0 { padding-left: var(--spacing-0); }
+.pr-0 { padding-right: var(--spacing-0); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 14px;
+  }
+  
+  .container {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+  
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Print */
+@media print {
+  body {
+    color: black;
+    background: white;
+  }
+  
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+  
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+}

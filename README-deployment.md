@@ -64,6 +64,37 @@ This checks:
 - CSS variable file availability
 - WP Engine deployment status
 
+### WP Engine API Integration
+
+The deployment verification script integrates with the WP Engine API for enhanced verification and management:
+
+1. It can check the installation status directly via API
+2. Automatically purge caches after deployment
+3. Get detailed installation information
+
+To use the WP Engine API, you'll need to set up API credentials:
+
+1. Make sure your WP Engine account has API access enabled
+2. Locate your WP Engine API credentials:
+   - API Username: This is provided by WP Engine
+   - API Password: This is provided by WP Engine
+
+3. Add these credentials to your GitHub repository as secrets:
+   - Go to your GitHub repository's Settings > Secrets and variables > Actions
+   - Add two new repository secrets:
+     - `WPE_API_USER`: Your WP Engine API username
+     - `WPE_API_PASS`: Your WP Engine API password
+
+Then set these as environment variables when running the script:
+
+```bash
+WPE_API_USER=your_user WPE_API_PASS=your_pass ./scripts/verify-deployment.sh dev
+```
+
+For GitHub Actions, add these as repository secrets:
+- `WPE_API_USER`
+- `WPE_API_PASS`
+
 ## GitHub Actions Workflow
 
 The repository includes GitHub Actions workflows for continuous integration and deployment:

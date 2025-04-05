@@ -52,3 +52,33 @@ yarn.lock
 .grunt
 dist/
 build/ 
+
+# Plugin dependencies
+app/public/wp-content/plugins/*/node_modules/
+app/public/wp-content/plugins/*/vendor/
+app/public/wp-content/themes/*/node_modules/
+app/public/wp-content/themes/*/vendor/
+
+# Misc files
+.DS_Store
+.vscode/
+.idea/
+*.log
+error_log
+access_log
+
+# Uncomment below lines to track specific plugins if needed
+# !app/public/wp-content/plugins/your-custom-plugin/ 
+
+# Style Sync & Deployment Automation
+.github_token
+.last_deploy_status
+temp-scripts/*
+!temp-scripts/.gitkeep
+workflow-status.json
+workflow-log.txt
+node_modules/
+env-comparison/*
+!env-comparison/.gitkeep
+test-screenshots/*
+!test-screenshots/.gitkeep 

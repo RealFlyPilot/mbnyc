@@ -1,0 +1,71 @@
+# Version control
+# Updated: Testing deployment with new GitHub Actions workflow and SSH key
+# Testing deployment: New deployment test
+.git
+.gitignore
+.github
+
+# WP Engine specific
+.wpe-*
+.wpengine-conf/
+
+# Cache files
+*.log
+wp-content/cache/
+wp-content/upgrade/
+
+# Local development files
+app/conf/
+app/logs/
+app/sql/
+conf/
+logs/
+
+# Node modules and build files
+node_modules/
+build/
+dist/
+
+# Sensitive files
+.env
+.env.*
+*.key
+*.pem
+
+# Temp and backup files
+*.bak
+*.tmp
+*~
+.DS_Store
+
+# Development files
+.DS_Store
+node_modules
+package.json
+package-lock.json
+# Exclude root-level composer files but not theme/plugin vendor files
+/composer.json
+/composer.lock
+.eslintrc
+.nvmrc
+.prettierrc
+webpack.config.js
+tailwind.config.js
+postcss.config.js
+README.md
+CHANGELOG.md
+LICENSE.md
+
+# Local development
+/wp-content/db.php
+local-xdebuginfo.php
+
+# Build files
+.DS_Store
+Thumbs.db
+
+# IMPORTANT: Only exclude vendor directories outside of themes/plugins
+# Be careful with vendor/ exclusions as themes/plugins may need them
+/vendor/
+# Don't exclude theme vendor directories
+!wp-content/themes/*/vendor/ 

@@ -49,4 +49,90 @@ docs/
 # IDE configuration
 .vscode/
 .idea/
-*.sublime-* 
+*.sublime-*
+
+# WP Engine Push Ignore File
+# Files excluded from deployment to WP Engine
+
+# Git and version control files
+.git/
+.github/
+.gitignore
+.gitattributes
+.gitlab-ci.yml
+
+# WordPress core files (if in repo)
+wp-admin/
+wp-includes/
+wp-*.php
+xmlrpc.php
+index.php
+license.txt
+readme.html
+
+# Development files and dependencies
+node_modules/
+vendor/
+.sass-cache/
+.eslintrc
+.prettierrc
+.stylelintrc
+.editorconfig
+.babelrc
+phpcs.xml
+webpack.config.js
+gulpfile.js
+Gruntfile.js
+postcss.config.js
+tailwind.config.js
+babel.config.js
+*.map
+
+# Package managers
+package.json
+package-lock.json
+composer.json
+composer.lock
+yarn.lock
+
+# Environment and configuration files
+.env
+.env.*
+.env-*
+local-config.php
+wp-cli.local.php
+
+# Development directories
+scripts/
+tests/
+wpe/
+wpengine-api/
+.wpe-devkit/
+local-scripts/
+
+# Log, backup and database files
+*.log
+*.sql
+*.sql.gz
+*.gz
+*.zip
+*.tar
+*.tar.gz
+debug.log
+
+# System and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-*
+
+# WP Engine specific
+.wpe-pull-ignore
+.wpe-push-ignore
+
+# Documentation
+README.md
+README-deployment.md
+CHANGELOG.md
+LICENSE.md 

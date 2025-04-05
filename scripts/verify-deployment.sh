@@ -17,16 +17,19 @@ NC='\033[0m' # No Color
 ENVIRONMENT=${1:-dev}
 echo -e "${BLUE}Verifying deployment for ${ENVIRONMENT}...${NC}"
 
-# Map environment to domain
+# Map environment to domain and WP Engine installation name
 case "$ENVIRONMENT" in
   "dev")
     DOMAIN="mbnycd.wpengine.com"
+    WPE_INSTALL="mbnycd"
     ;;
   "staging")
     DOMAIN="mbnycs.wpengine.com"
+    WPE_INSTALL="mbnycs"
     ;;
   "production")
     DOMAIN="mbnyc.com"
+    WPE_INSTALL="mbnyc"
     ;;
   *)
     echo -e "${RED}Invalid environment: $ENVIRONMENT${NC}"
@@ -139,27 +142,86 @@ check_php_errors() {
 check_css_variables() {
   echo -e "\n${BLUE}Checking for CSS variables...${NC}"
   
-  local css_url="https://${DOMAIN}/wp-content/themes/hello-elementor-child/css/variables.css"
-  local css_content=$(curl -s "$css_url")
+  # Try multiple possible paths for CSS variables
+  local css_paths=(
+    "https://${DOMAIN}/wp-content/themes/hello-elementor-child/css/variables.css"
+    "https://${DOMAIN}/wp-content/themes/mbnyc/assets/css/variables.css"
+    "https://${DOMAIN}/wp-content/themes/hello-elementor-child/assets/css/variables.css"
+  )
   
-  if [ -z "$css_content" ]; then
-    report_check "FAIL" "CSS variables file not accessible"
-  elif echo "$css_content" | grep -q ":root"; then
-    report_check "PASS" "CSS variables file contains :root declaration"
-  else
-    report_check "FAIL" "CSS variables file exists but doesn't contain expected content"
+  local found=false
+  
+  for css_url in "${css_paths[@]}"; do
+    echo -e "${BLUE}Checking path: ${css_url}${NC}"
+    local css_content=$(curl -s "$css_url")
+    
+    if echo "$css_content" | grep -q ":root"; then
+      report_check "PASS" "CSS variables file found at $css_url and contains :root declaration"
+      found=true
+      break
+    elif [ -n "$css_content" ] && [ "$css_content" != *"404 Not Found"* ]; then
+      report_check "FAIL" "File found at $css_url but doesn't contain expected content"
+      found=true
+      break
+    fi
+  done
+  
+  if [ "$found" = false ]; then
+    report_check "FAIL" "CSS variables file not found at any expected locations"
   fi
 }
 
-# Check if WP Engine sees the deployment
+# Check if WP Engine sees the deployment using API
 check_wpengine_status() {
   echo -e "\n${BLUE}Checking WP Engine deployment status...${NC}"
   
-  echo -e "${YELLOW}⚠ NOTE:${NC} Automated verification of WP Engine deployment status requires API access"
-  echo -e "${YELLOW}⚠ NOTE:${NC} Check the WP Engine dashboard for detailed deployment status"
-  
-  # You would need to use the WP Engine API to automate this check
-  # This is a placeholder for future implementation
+  # Check if we have the WP Engine API credentials
+  if [[ -z "$WPE_API_USER" || -z "$WPE_API_PASS" ]]; then
+    echo -e "${YELLOW}WP Engine API credentials not found. Skipping API checks.${NC}"
+    echo -e "${YELLOW}To enable API checks, set WPE_API_USER and WPE_API_PASS environment variables.${NC}"
+  else
+    echo -e "${BLUE}Checking WP Engine installation status...${NC}"
+    
+    # Create Basic Auth header
+    AUTH_HEADER="Authorization: Basic $(echo -n "$WPE_API_USER:$WPE_API_PASS" | base64)"
+    
+    # Make API request to get installation details
+    INSTALLATION_DATA=$(curl -s -H "$AUTH_HEADER" \
+      "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL")
+    
+    if [[ "$INSTALLATION_DATA" == *"error"* ]]; then
+      echo -e "${RED}Error retrieving installation data: $INSTALLATION_DATA${NC}"
+    else
+      # Extract and display installation information using jq if available
+      if command -v jq &> /dev/null; then
+        INSTALL_NAME=$(echo $INSTALLATION_DATA | jq -r '.name')
+        INSTALL_ENV=$(echo $INSTALLATION_DATA | jq -r '.environment')
+        INSTALL_STATUS=$(echo $INSTALLATION_DATA | jq -r '.status')
+        WP_VERSION=$(echo $INSTALLATION_DATA | jq -r '.wordpress.version')
+        PHP_VERSION=$(echo $INSTALLATION_DATA | jq -r '.php_version')
+        
+        echo -e "${GREEN}Installation Name: $INSTALL_NAME${NC}"
+        echo -e "${GREEN}Environment Type: $INSTALL_ENV${NC}"
+        echo -e "${GREEN}Status: $INSTALL_STATUS${NC}"
+        echo -e "${GREEN}WordPress Version: $WP_VERSION${NC}"
+        echo -e "${GREEN}PHP Version: $PHP_VERSION${NC}"
+      else
+        echo -e "${YELLOW}jq not installed, showing raw API response:${NC}"
+        echo -e "${GREEN}$INSTALLATION_DATA${NC}"
+      fi
+      
+      # Purge WP Engine cache
+      echo -e "${BLUE}Purging WP Engine cache...${NC}"
+      PURGE_RESULT=$(curl -s -X POST -H "$AUTH_HEADER" \
+        "https://api.wpengineapi.com/v1/installs/$WPE_INSTALL/cache_purge")
+      
+      if [[ "$PURGE_RESULT" == *"error"* ]]; then
+        echo -e "${RED}Error purging cache: $PURGE_RESULT${NC}"
+      else
+        echo -e "${GREEN}Cache purged successfully.${NC}"
+      fi
+    fi
+  fi
 }
 
 # Run all checks
